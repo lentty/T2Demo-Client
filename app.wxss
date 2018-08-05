@@ -7,6 +7,32 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 200rpx 0;
   box-sizing: border-box;
 } 
+
+@font-face {
+  font-family: 'iconfont';  /* project id 777814 */
+  src: url('//at.alicdn.com/t/font_777814_c4bgxg1m6xl.eot');
+  src: url('//at.alicdn.com/t/font_777814_c4bgxg1m6xl.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_777814_c4bgxg1m6xl.woff') format('woff'),
+  url('//at.alicdn.com/t/font_777814_c4bgxg1m6xl.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_777814_c4bgxg1m6xl.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-chakan:before { content: "\e600"; }
+
+.icon-choujiang1:before { content: "\e601"; }
+
+.icon-qiandao:before { content: "\e6b3"; }
+
+.icon-wendati:before { content: "\e67d"; }
+
+

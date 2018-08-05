@@ -638,7 +638,7 @@ icon {
 }
 
 .weui-btn:first-child {
-  margin-top: 0;
+  margin-top: 0px;
 }
 
 .weui-btn-area {
