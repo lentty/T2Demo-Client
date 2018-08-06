@@ -1,5 +1,8 @@
 //app.js
 App({
+  globalData: {
+    host: 'http://localhost:8090'
+  },
   data: {
     appid: 'wxb0f25ab0f0fe1a2f',
     appsecret: 'df5cd9d92cd000596b1ba7e76c363fce',
@@ -28,8 +31,5 @@ App({
         }
       }
     })
-  },
-  globalData: {
-    userInfo: null
   }
 })

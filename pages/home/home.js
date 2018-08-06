@@ -28,30 +28,36 @@ Page({
   getUserInfo: function(e) {
     console.log(e)
     if (e.detail.userInfo) {
-      wx.setStorageSync('userInfo', e.detail.userInfo); 
-      this.setData({
-        userInfo: e.detail.userInfo,
-        hasUserInfo: true
-      })
-      this.addUserInfo();
+      this.addUser(e.detail.userInfo);
     } else {
       console.log(e.detail.errMsg)
     }
   },
 
-  addUserInfo: function(){
+  addUser: function(user){
     var that = this;
-    var d = that.data;
     var openid = wx.getStorageSync('openid');
     console.log('openid: '+openid)
     if(openid){
-       d.userInfo.id = openid;
+       user.id = openid;
        wx.request({
-         url: 'http://localhost:8080/user/save',
+         url: app.globalData.host + '/user/save',
          method: 'POST',
-         data: d.userInfo,
+         data: user,
          success: function (res) {
            console.log(res.data);
+           that.setData({
+             userInfo: user,
+             hasUserInfo: true
+           })
+           wx.setStorageSync('userInfo', user);
+         },
+         fail: function (e) {
+           wx.showToast({
+             title: '登录失败',
+             icon: 'none',
+             duration: 2000
+           });
          }
        })
     }

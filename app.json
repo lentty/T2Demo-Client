@@ -1,7 +1,7 @@
 {
   "pages":[
     "pages/home/home",
-    "pages/index/index"
+    "pages/rankinglist/rankinglist"
   ],
   "window":{
     "backgroundTextStyle":"light",
@@ -16,7 +16,7 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/rankinglist/rankinglist",
         "text": "排行榜",
         "iconPath": "images/bot_home.png",
         "selectedIconPath": "images/bot_home02.png"
