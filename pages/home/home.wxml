@@ -12,29 +12,36 @@
   <view class="weui-cells weui-cells_after-title">
     <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
       <view class="weui-cell__hd">
-        <image src="../../images/checkin.png" style="margin-right: 5px;vertical-align: middle;width:20px; height: 20px;"></image>
+        <image src="../../images/checkin.png" class="navIcon"></image>
       </view>
       <view class="weui-cell__bd">签到</view>
     </navigator>
     <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
       <view class="weui-cell__hd">
-        <image src="../../images/check.png" style="margin-right: 5px;vertical-align: middle;width:20px; height: 20px;"></image>
+        <image src="../../images/check.png" class="navIcon"></image>
       </view>
       <view class="weui-cell__bd">查看积分</view>
       <view class="weui-cell__ft weui-cell__ft_in-access"></view>
     </navigator>
     <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
       <view class="weui-cell__hd">
-        <image src="../../images/qanda.png" style="margin-right: 5px;vertical-align: middle;width:20px; height: 20px;"></image>
+        <image src="../../images/qanda.png" class="navIcon"></image>
       </view>
       <view class="weui-cell__bd">开始答题</view>
       <view class="weui-cell__ft weui-cell__ft_in-access"></view>
     </navigator>
     <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
       <view class="weui-cell__hd">
-        <image src="../../images/lottery.png" style="margin-right: 5px;vertical-align: middle;width:20px; height: 20px;"></image>
+        <image src="../../images/lottery.png" class="navIcon"></image>
       </view>
       <view class="weui-cell__bd">抽奖</view>
+      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+    </navigator>
+    <navigator url="../schedule/schedule" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+      <view class="weui-cell__hd">
+        <image src="../../images/schedule.png" class="navIcon"></image>  
+      </view>
+      <view class="weui-cell__bd">查看分享安排</view>
       <view class="weui-cell__ft weui-cell__ft_in-access"></view>
     </navigator>
   </view>

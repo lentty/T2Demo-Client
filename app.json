@@ -1,7 +1,8 @@
 {
   "pages":[
     "pages/home/home",
-    "pages/rankinglist/rankinglist"
+    "pages/rankinglist/rankinglist",
+    "pages/schedule/schedule"
   ],
   "window":{
     "backgroundTextStyle":"light",
