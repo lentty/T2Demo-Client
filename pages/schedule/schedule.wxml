@@ -1,3 +1,19 @@
 <view class="page">
-<text>Schedule page</text>
+  <view class="title">
+    <text>分享顺序</text>
+  </view>
+  <view class="sharingListContainer">
+    <view class='sharingList' wx:for="{{list}}" wx:key="name" wx:for-item="item">
+      <view class="timeLineIconWrap" style=" background-image: url('../../images/timelineNode.png'); background-size: cover;">
+        <!-- <image class="timeNodeIcon" src="../../images/timelineNode.png"></image> -->
+      </view>
+      <view class="photo">
+        <image src="{{item.avtarUrl}}"></image>
+      </view>
+      <view class='personalInfo'>
+        <view>{{item.name}}</view>
+        <view class="department">{{item.department}}</view>
+      </view>
+    </view>
+  </view>
 </view>

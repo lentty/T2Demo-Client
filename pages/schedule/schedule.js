@@ -5,7 +5,23 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    "list": [
+      {
+        "name": "smallsun",
+        "avtarUrl": "https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJiaCBO9f33YY4jkBn0ibhOmDiaI2Dc5iafHdc62iaNeeDCOkGmMBtXSjuGfNGnnWlb7LRcuqD6yqr6zqw/132",
+        "department": "PLT MDF Team"
+      },
+      {
+        "name": "mongo",
+        "avtarUrl": "https://wx.qlogo.cn/mmopen/vi_32/n9ZD4KuePgGyC5870aAgbPrcQZ4ic79UFPyx1yYAVLHeuiahO6rGDpkoNYrRq52ecVsibRqibdZqTpfFrVyXycgPibw/132",
+        "department": "PLT RBP Team"
+      },
+      {
+        "name": "smallsun",
+        "avtarUrl": "https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJiaCBO9f33YY4jkBn0ibhOmDiaI2Dc5iafHdc62iaNeeDCOkGmMBtXSjuGfNGnnWlb7LRcuqD6yqr6zqw/132",
+        "department": "PLT MDF Team"
+      }
+    ]
   },
 
   /**
