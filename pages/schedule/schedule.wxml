@@ -4,8 +4,8 @@
   </view>
   <view class="sharingListContainer">
     <view class='sharingList' wx:for="{{list}}" wx:key="name" wx:for-item="item">
-      <view class="timeLineIconWrap" style=" background-image: url('../../images/timelineNode.png'); background-size: cover;">
-        <!-- <image class="timeNodeIcon" src="../../images/timelineNode.png"></image> -->
+      <view class="timeLineIconWrap" >
+        <image class="timeNodeIcon" src="../../images/timeNode.png"></image>
       </view>
       <view class="photo">
         <image src="{{item.avtarUrl}}"></image>

@@ -8,9 +8,10 @@
 .sharingList {
   display: flex;
   align-items:center;
+  margin-top:-1px;
 }
 .timeLineIconWrap {
-  width: 40px;
+  width: 30px;
   height: 74px;
 }
 .timeNodeIcon {
