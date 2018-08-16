@@ -1,34 +1,37 @@
 // pages/schedule/schedule.js
+const app = getApp();
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    "list": [
-      {
-        "name": "smallsun",
-        "avtarUrl": "https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJiaCBO9f33YY4jkBn0ibhOmDiaI2Dc5iafHdc62iaNeeDCOkGmMBtXSjuGfNGnnWlb7LRcuqD6yqr6zqw/132",
-        "department": "PLT MDF Team"
-      },
-      {
-        "name": "mongo",
-        "avtarUrl": "https://wx.qlogo.cn/mmopen/vi_32/n9ZD4KuePgGyC5870aAgbPrcQZ4ic79UFPyx1yYAVLHeuiahO6rGDpkoNYrRq52ecVsibRqibdZqTpfFrVyXycgPibw/132",
-        "department": "PLT RBP Team"
-      },
-      {
-        "name": "smallsun",
-        "avtarUrl": "https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJiaCBO9f33YY4jkBn0ibhOmDiaI2Dc5iafHdc62iaNeeDCOkGmMBtXSjuGfNGnnWlb7LRcuqD6yqr6zqw/132",
-        "department": "PLT MDF Team"
-      }
-    ]
+    "sessionList": []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var that = this;
+    wx.request({
+      url: app.globalData.host + '/session/list',
+      method: 'GET',
+      success: function (res) {
+        console.log(res.data);
+        that.setData({
+          sessionList: res.data
+        });
+      },
+      fail: function (e) {
+        wx.showToast({
+          title: '数据获取失败',
+          icon: 'none',
+          duration: 2000
+        });
+      }
+    });
   },
 
   /**

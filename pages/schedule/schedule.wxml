@@ -1,17 +1,18 @@
 <view class="page">
   <view class="title">
-    <text>分享顺序</text>
+    <text>当前赛季分享顺序</text>
   </view>
   <view class="sharingListContainer">
-    <view class='sharingList' wx:for="{{list}}" wx:key="name" wx:for-item="item">
+    <view class='sharingList' wx:for="{{sessionList}}" wx:key="name" wx:for-item="item">
       <view class="timeLineIconWrap" >
-        <image class="timeNodeIcon" src="../../images/timeNode.png"></image>
+        <image wx:if="{{!item.next}}" class="timeNodeIcon" src="../../images/timeNode.png"></image>
+        <image wx:if="{{item.next}}" class="timeNodeIcon" src="../../images/currentNode.png"></image>
       </view>
       <view class="photo">
-        <image src="{{item.avtarUrl}}"></image>
+        <image src="{{item.avatarUrl || '../../images/defaultAvatar.png'}}"></image>
       </view>
       <view class='personalInfo'>
-        <view>{{item.name}}</view>
+        <view>{{item.nickname}}</view>
         <view class="department">{{item.department}}</view>
       </view>
     </view>

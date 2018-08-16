@@ -1,10 +1,12 @@
 /* pages/schedule/schedule.wxss */
 
 .title text{
-  padding: 1rem;
+  padding: 1rem 0 1rem 1.4rem;
   color: orange;
 }
-
+.sharingListContainer {
+  padding: 1rem;
+}
 .sharingList {
   display: flex;
   align-items:center;
@@ -19,13 +21,15 @@
   height: 100%;
 }
 .photo {
-  margin-right: 1rem;
+  margin: 0 1rem 0 0.5rem;
 }
 .photo image {
   width: 64px;
   height: 64px;
   border-radius: 50%;
+  vertical-align: middle;
 }
 .department {
   font-size: 0.875rem;
+  color: #586069;
 }
