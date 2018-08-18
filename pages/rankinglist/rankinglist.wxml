@@ -2,7 +2,7 @@
 <view class="page">
   <view class="page__bd">
     <view class="weui-cell myRanking">
-        <view class="firstCol"></view>
+        <view class="firstCol">{{myRanking.rank}}</view>
         <image src="{{myRanking.avatarUrl}}" class="userinfo-avatar"></image>
         <view class="weui-cell__bd">{{myRanking.nickname}}</view>
         <view class="weui-cell__ft">{{myRanking.points}}</view>
