@@ -4,6 +4,7 @@ const app = getApp()
 
 Page({
   data: {
+    myRanking: {},
     rankingList: []
   },
   onLoad: function () {
@@ -16,6 +17,7 @@ Page({
         that.setData({
           rankingList: res.data
         });
+        that.findMyRanking();
       },
       fail: function (e) {
         wx.showToast({
@@ -25,5 +27,12 @@ Page({
         });
       }
     })
+  },
+  findMyRanking: function () {
+    let myId = wx.getStorageSync('userInfo').nickName; 
+    let myRanking = this.data.rankingList.filter(item => item.nickname === myId)[0];
+    this.setData({
+      myRanking: myRanking
+    });
   }
 })

@@ -1,4 +1,14 @@
 /**index.wxss**/
+.page {
+  background-color: #EDEDED;
+}
+.myRanking {
+  margin-bottom: 1rem;
+  background-color: #FFF;
+}
+.firstCol {
+  min-width: 1.25rem; 
+}
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -18,4 +28,9 @@
 
 .usermotto {
   margin-top: 200px;
+}
+
+.weui-cell__ft {
+  color: #FDBC40;
+  font-size: 1.5rem;
 }

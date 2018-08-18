@@ -2,7 +2,7 @@
 
 .title text{
   padding: 1rem 0 1rem 1.4rem;
-  color: orange;
+  color: #FDBC40;
 }
 .sharingListContainer {
   padding: 1rem;

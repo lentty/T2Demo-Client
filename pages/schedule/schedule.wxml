@@ -6,8 +6,8 @@
     <view class='sharingList' wx:for="{{sessionList}}" wx:key="name" wx:for-item="item">
       <view class="timeLineIconWrap" >
         <image wx:if="{{item.status === 1}}" class="timeNodeIcon" src="../../images/passnode2.png"></image>
-        <image wx:elif="{{item.status === 2}}" class="timeNodeIcon" src="../../images/current1.png"></image>
-        <image wx:else class="timeNodeIcon" src="../../images/waitingNode.png"></image>
+        <image wx:elif="{{item.status === 2}}" class="timeNodeIcon" src="../../images/currentNode3.png"></image>
+        <image wx:else class="timeNodeIcon" src="../../images/waitingNode3.png"></image>
       </view>
       <view class="photo">
         <image src="{{item.avatarUrl || '../../images/defaultAvatar.png'}}"></image>
