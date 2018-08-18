@@ -29,8 +29,8 @@ Page({
     })
   },
   findMyRanking: function () {
-    let myId = wx.getStorageSync('userInfo').nickName; 
-    let myRanking = this.data.rankingList.filter(item => item.nickname === myId)[0];
+    let myId = wx.getStorageSync('userInfo').id; 
+    let myRanking = this.data.rankingList.filter(item => item.userId === myId)[0];
     this.setData({
       myRanking: myRanking
     });
