@@ -15,7 +15,7 @@
         <image src="../../images/checkin.png" class="navIcon"></image>
       </view>
        <view wx:if="{{!isSessionOwner}}" class="weui-cell__bd">签到</view>
-      <view wx:else class="weui-cell__bd">生成签到口令</view>
+      <view wx:else class="weui-cell__bd" bindtap="generateCode">生成签到口令</view>
     </navigator>
     <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
       <view class="weui-cell__hd">

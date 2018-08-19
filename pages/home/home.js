@@ -91,6 +91,36 @@ Page({
     }
   },
 
+  generateCode: function (event) {
+    var openid = wx.getStorageSync('openid');
+    var that = this;
+    if (openid) {
+      wx.request({
+        url: app.globalData.host + '/user/checkinCode/' + openid,
+        method: 'GET',
+        success: function (res) {
+          console.log(res.data);
+          if (res.data.msg == "ok") {
+            var code = res.data.retObj;
+            wx.showModal({
+              title: '签到口令',
+              content: code,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  console.log('用户点击确定')
+                }
+              }
+            })
+          }
+        },
+        fail: function (e) {
+          console.log('Failed to get checkin code');
+        }
+      })
+    }
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
