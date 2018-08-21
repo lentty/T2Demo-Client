@@ -1,6 +1,7 @@
 // pages/home/home.js
 import {getCurrentDate} from '../../utils/util';
 const app = getApp();
+const openId = wx.getStorageSync('openid');
 
 Page({
 
@@ -10,7 +11,9 @@ Page({
   data: {
     userInfo: {},
     hasUserInfo: false,
-    isSessionOwner: false
+    isSessionOwner: false,
+    isModalInputHidden: true,
+    checkinCode: ''
   },
 
   /**
@@ -121,6 +124,77 @@ Page({
     }
   },
 
+  checkIn: function () {
+    let isValidTime = this.validateCheckinTime();
+    if (isValidTime) {
+        this.setData({'isModalInputHidden': false});
+    } else {
+      wx.showModal({
+        title: '错误',
+        content: '别慌，还没到签到时间',
+        showCancel: false,
+        success: function (res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          }
+        }
+      })
+    }
+  },
+  // valid time: Tuesday 12:30 ~ 13:30
+  validateCheckinTime: function () {
+    let isValid = true;
+    let date = new Date();
+    if (date.getDay() !== 2) {
+      isValid = false;
+    } else if (date.getHours() <12 || date.getHours() > 13) {
+      isValid = false;
+    } else if (date.getHours() === 12 && date.getMinutes() < 30){
+      isValid = false;
+    } else if (date.getHours() === 13 && date.getMinutes() > 30) {
+      isValid = false;
+    }
+    return isValid;
+  },
+  resetCheckinCode: function () {
+    this.setData({checkinCode: ''});
+  },
+  submitCheckinCode: function () {
+    let that = this;
+    this.setData({isModalInputHidden: true});
+    if (openId) {
+      wx.request({
+        url: app.globalData.host + '/user/checkin/' + openId + '/' + that.data.checkinCode,
+        method: 'GET',
+        success: function (res) {
+          if (res.data.msg === 'ok') {
+            wx.showToast({
+              title: '签到成功',
+              duration: 2000
+            })
+          } else {
+            wx.showToast({
+              title: '签到失败，请核对口令',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+          that.resetCheckinCode();
+        },
+        fail: function (error) {
+          wx.showToast({
+            title: '签到失败',
+            icon: 'none',
+            duration: 2000
+          })
+          that.resetCheckinCode();
+        }
+      })
+    }
+  },
+  onCodeInputBlur: function (evt) {
+    this.setData({checkinCode: evt.detail.value})
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
