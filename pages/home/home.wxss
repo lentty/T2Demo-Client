@@ -37,3 +37,11 @@
   width:20px; 
   height: 20px;
 }
+
+#generateCodeModal view {
+  display: flex;
+}
+#generateCodeModal text {
+  flex: 1 1 auto;
+  text-align: center;
+}

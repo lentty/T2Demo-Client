@@ -13,6 +13,7 @@ Page({
     hasUserInfo: false,
     isSessionOwner: false,
     isModalInputHidden: true,
+    isGenerateCodeModal: true,
     checkinCode: ''
   },
 
@@ -105,16 +106,8 @@ Page({
           console.log(res.data);
           if (res.data.msg == "ok") {
             var code = res.data.retObj;
-            wx.showModal({
-              title: '签到口令',
-              content: code,
-              showCancel: false,
-              success: function (res) {
-                if (res.confirm) {
-                  console.log('用户点击确定')
-                }
-              }
-            })
+            that.setData({checkinCode: code});
+            that.setData({isGenerateCodeModal: false});
           }
         },
         fail: function (e) {
@@ -122,6 +115,28 @@ Page({
         }
       })
     }
+  },
+
+  changeCheckinCode: function () {
+    let that = this;
+    wx.request({
+      url: app.globalData.host + '/user/checkinCode/' + openId,
+      method: 'GET',
+      success: function (res) {
+        console.log(res.data);
+        if (res.data.msg == "ok") {
+          var code = res.data.retObj;
+          that.setData({ checkinCode: code });
+        }
+      }, 
+      fail: function (e) {
+        console.log('Failed to get checkin code');
+      }
+    });
+  },
+
+  saveChenkinCode: function () {
+    
   },
 
   checkIn: function () {
