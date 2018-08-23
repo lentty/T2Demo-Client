@@ -100,7 +100,7 @@ Page({
     var that = this;
     if (openid) {
       wx.request({
-        url: app.globalData.host + '/user/checkinCode/' + openid,
+        url: app.globalData.host + '/checkin/code/' + openid,
         method: 'GET',
         success: function (res) {
           console.log(res.data);
@@ -120,7 +120,7 @@ Page({
   changeCheckinCode: function () {
     let that = this;
     wx.request({
-      url: app.globalData.host + '/user/checkinCode/' + openId,
+      url: app.globalData.host + '/checkin/code/' + openId,
       method: 'GET',
       success: function (res) {
         console.log(res.data);
@@ -136,11 +136,38 @@ Page({
   },
 
   saveChenkinCode: function () {
-    
+    let that = this;
+    this.setData({ isGenerateCodeModal: true });
+      wx.request({
+        url: app.globalData.host + '/checkin/confirm/' + openId + '/' + that.data.checkinCode,
+        method: 'GET',
+        success: function (res) {
+          if (res.data.msg === 'ok') {
+            wx.showToast({
+              title: '操作成功',
+              duration: 2000
+            })
+          } else {
+            wx.showToast({
+              title: '操作失败，请重试',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        },
+        fail: function (error) {
+          wx.showToast({
+            title: '操作失败，请重试',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      })
   },
 
   checkIn: function () {
     let isValidTime = this.validateCheckinTime();
+    //let isValidTime = true;
     if (isValidTime) {
         this.setData({'isModalInputHidden': false});
     } else {
@@ -179,7 +206,7 @@ Page({
     this.setData({isModalInputHidden: true});
     if (openId) {
       wx.request({
-        url: app.globalData.host + '/user/checkin/' + openId + '/' + that.data.checkinCode,
+        url: app.globalData.host + '/checkin/' + openId + '/' + that.data.checkinCode,
         method: 'GET',
         success: function (res) {
           if (res.data.msg === 'ok') {
@@ -210,6 +237,7 @@ Page({
   onCodeInputBlur: function (evt) {
     this.setData({checkinCode: evt.detail.value})
   },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

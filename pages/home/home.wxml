@@ -10,13 +10,13 @@
     </block>
   </view>
   <view class="weui-cells weui-cells_after-title">
-    <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+    <view class="weui-cell weui-cell_access" hover-class="weui-cell_active">
       <view class="weui-cell__hd">
         <image src="../../images/checkin.png" class="navIcon"></image>
       </view>
        <view wx:if="{{!isSessionOwner}}" class="weui-cell__bd" bindtap="checkIn">签到</view>
       <view wx:else class="weui-cell__bd" bindtap="generateCode">生成签到口令</view>
-    </navigator>
+    </view> 
     <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
       <view class="weui-cell__hd">
         <image src="../../images/check.png" class="navIcon"></image>
