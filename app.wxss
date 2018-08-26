@@ -35,4 +35,6 @@
 
 .icon-wendati:before { content: "\e67d"; }
 
-
+page {
+  background-color: #f6f7f8;
+}

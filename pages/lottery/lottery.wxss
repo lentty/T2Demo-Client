@@ -1,0 +1,27 @@
+/* pages/lottery/lottery.wxss */
+.launchLotterySection {
+  margin-top: 2rem;
+}
+.errorInputMsg {
+  color: red;
+  font-size: 0.8rem;  
+}
+.submitNumberBtn {
+  background: #414A90;
+  width: 95%;
+  color: #FFF;
+}
+.launchBtn {
+  background:#FFF;
+  width: 95%;
+  color: #414A90;
+  border:1px solid;
+}
+.inputSection {
+  background:#FFF;
+  margin-bottom:1rem;
+  padding:0.25rem;
+  border-top: 1px solid #D6D9DC;
+  border-bottom: 1px solid #D6D9DC;
+}
+

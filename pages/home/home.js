@@ -1,5 +1,5 @@
 // pages/home/home.js
-import {getCurrentDate} from '../../utils/util';
+import Util from '../../utils/util';
 const app = getApp();
 const openId = wx.getStorageSync('openid');
 
@@ -12,7 +12,7 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     isSessionOwner: false,
-    isModalInputHidden: true,
+    isCheckinModalHidden: true,
     isGenerateCodeModal: true,
     checkinCode: ''
   },
@@ -33,7 +33,7 @@ Page({
   },
 
   setSessionOwner: function () {
-    var currentDate = getCurrentDate();
+    var currentDate = Util.getCurrentDate();
     console.log('currentDate:' + currentDate);
     var that = this;
     wx.request({
@@ -48,6 +48,7 @@ Page({
             that.setData({
               isSessionOwner: true
             });
+            wx.setStorageSync('isSessionOwner', true);
           }
         }
       },
@@ -169,7 +170,7 @@ Page({
     let isValidTime = this.validateCheckinTime();
     //let isValidTime = true;
     if (isValidTime) {
-        this.setData({'isModalInputHidden': false});
+        this.setData({'isCheckinModalHidden': false});
     } else {
       wx.showModal({
         title: '错误',
@@ -193,9 +194,7 @@ Page({
       isValid = false;
     } else if (date.getHours() === 12 && date.getMinutes() < 30){
       isValid = false;
-    } else if (date.getHours() === 13 && date.getMinutes() > 30) {
-      isValid = false;
-    }
+    } 
     return isValid;
   },
   resetCheckinCode: function () {
@@ -203,7 +202,7 @@ Page({
   },
   submitCheckinCode: function () {
     let that = this;
-    this.setData({isModalInputHidden: true});
+    this.setData({isCheckinModalHidden: true});
     if (openId) {
       wx.request({
         url: app.globalData.host + '/checkin/' + openId + '/' + that.data.checkinCode,
@@ -237,7 +236,41 @@ Page({
   onCodeInputBlur: function (evt) {
     this.setData({checkinCode: evt.detail.value})
   },
-
+  validateLotteryDrawTime: function () {
+    let isValid = true;
+    let date = new Date();
+    if (date.getDay() !== 2) {
+      isValid = false;
+    } else if (date.getHours() < 13 || date.getHours() > 14) {
+      isValid = false;
+    }
+    return isValid;
+  },
+  handleLotteryClick: function () {
+    let isTimeValid = this.validateLotteryDrawTime();
+    if (isTimeValid) {
+      let msg = '还未到抽奖时间';
+      Util.showToast(msg, 'none', 2000);
+      return;
+    }
+    wx.request({
+      url: app.globalData.host + '/lottery/validate/' + openId,
+      method: 'GET',
+      success: function (res) {
+        if (res.data.retObj) {
+          wx.navigateTo({
+            url: '../lottery/lottery',
+          })
+        } else {
+          let errMsg = '签到完再来抽奖哦';
+          Util.showToast(errMsg, 'none', 2000);
+        }
+      },
+      fail: function (err) {
+        console.log(err);
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

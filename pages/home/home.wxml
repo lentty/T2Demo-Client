@@ -35,7 +35,7 @@
       <view class="weui-cell__hd">
         <image src="../../images/lottery.png" class="navIcon"></image>
       </view>
-      <view class="weui-cell__bd">抽奖</view>
+      <view class="weui-cell__bd" bindtap="handleLotteryClick">抽奖</view>
       <view class="weui-cell__ft weui-cell__ft_in-access"></view>
     </navigator>
     <navigator url="../schedule/schedule" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
@@ -46,7 +46,7 @@
       <view class="weui-cell__ft weui-cell__ft_in-access"></view>
     </navigator>
   </view>
-  <modal id="codeInputModal" hidden="{{isModalInputHidden}}" title="请输入签到口令" confirm-text="提交" cancel-text="重置" bindcancel="resetCheckinCode" bindconfirm="submitCheckinCode">  
+  <modal id="codeInputModal" hidden="{{isCheckinModalHidden}}" title="请输入签到口令" confirm-text="提交" cancel-text="重置" bindcancel="resetCheckinCode" bindconfirm="submitCheckinCode">  
     <input bindblur="onCodeInputBlur" type='text' placeholder="点我输入口令" value="{{checkinCode}}" auto-focus/>
   </modal>
   <modal id="generateCodeModal" hidden="{{isGenerateCodeModal}}" title="签到口令" no-cancel="true" confirm-text="确定" bindconfirm="saveChenkinCode"> 

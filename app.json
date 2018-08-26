@@ -1,14 +1,15 @@
 {
-  "pages":[
+  "pages": [
     "pages/home/home",
     "pages/rankinglist/rankinglist",
-    "pages/schedule/schedule"
+    "pages/schedule/schedule",
+    "pages/lottery/lottery"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#66CCCC",
     "navigationBarTitleText": "T2",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
   },
   "tabBar": {
     "color": "#858585",
@@ -21,7 +22,7 @@
         "text": "排行榜",
         "iconPath": "images/bot_home.png",
         "selectedIconPath": "images/bot_home02.png"
-      },  
+      },
       {
         "pagePath": "pages/home/home",
         "text": "个人中心",

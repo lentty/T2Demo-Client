@@ -13,4 +13,12 @@ const getCurrentDate = function () {
   return nowDate;
 };
 
-export {getCurrentDate};
+const showToast = function (msg, icon, time) {
+  wx.showToast({
+    title: msg,
+    icon: icon,
+    duration: time
+  })
+};
+
+export default { getCurrentDate, showToast };
