@@ -10,11 +10,18 @@
   </form>
 
 <view class="launchLotterySection" wx:if="{{isSessionOwner}}">
-  <button class="launchBtn" bindtap="launchLottery">开奖</button>
+  <button class="launchBtn" disabled="{{isLaunchBtnDisabled}}" bindtap="launchLottery">开奖</button>
 </view>
-<view wx:if="{{!!finalLuckyNumber}}">中奖号码是{{finalLuckyNumber}}
+<view class="luckNumberMsg" wx:if="{{!!finalLuckyNumber}}">中奖号码是<text>{{finalLuckyNumber}}</text>
 </view>
-<view >
-
+<view class="myLuckyMsg" wx:if="{{isLuckyDog}}">
+  恭喜你，中奖啦！
+</view>
+<view class="luckyListInfo" wx:if="{{luckyDogs.length}}">
+  <text>- 今日中奖名单 -</text> 
+  <view class="weui-cell" wx:for="{{luckyDogs}}" wx:key="index">
+    <image src="../../images/win.png" class="luckyListItemImg"></image>
+    <view class="weui-cell-bd">{{item}}</view>
+  </view>
 </view>
 </view>

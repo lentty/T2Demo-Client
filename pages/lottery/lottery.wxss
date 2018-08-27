@@ -24,4 +24,37 @@
   border-top: 1px solid #D6D9DC;
   border-bottom: 1px solid #D6D9DC;
 }
-
+.luckNumberMsg {
+  height: 2.5rem;
+  background: #FFF;
+  border-top: 1px solid #D6D9DC;
+  border-bottom: 1px solid #D6D9DC;
+  margin:0.5rem 0;
+  text-align:center;
+  line-height:2.5rem;
+}
+.luckNumberMsg>text {
+  color: #FDBC40;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.myLuckyMsg {
+  text-align: center;
+  /* use background-image:  */
+  background: #FFF;
+  margin-bottom: 0.5rem;
+}
+.luckyListInfo {
+  background: #FFF;
+  border-top: 1px solid #D6D9DC;
+  border-bottom: 1px solid #D6D9DC;
+}
+.luckyListInfo>text{
+  text-align: center;
+  display: block;
+}
+.luckyListItemImg {
+  width:32px;
+  height:32px;
+  margin-right:0.5rem;
+}

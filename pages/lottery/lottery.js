@@ -1,9 +1,10 @@
 // pages/lottery/lottery.js
 import Util from '../../utils/util';
+import {Stomp} from '../../utils/stomp.min.js';
 const app = getApp();
 const openId = wx.getStorageSync('openid');
 const isSessionOwner = wx.getStorageSync('isSessionOwner');
-var stompClient = {};
+let stompClient = {};
 
 Page({
 
@@ -13,7 +14,10 @@ Page({
   data: {
     userCount: 1,
     isSessionOwner: isSessionOwner,
-    luckyNumber: 0
+    luckyNumber: 0,
+    isLuckyDog: false,
+    luckyDogs: [],
+    isLaunchBtnDisabled: false
   },
 
   /**
@@ -54,6 +58,7 @@ Page({
           if (res.data.msg === 'ok') {
             let msg = '抽奖号下注成功';
             Util.showToast(msg, 'success', 2000);
+            that.setData({ mypickNumber: pickNumber});
             that.initSocket();
           }
         },
@@ -66,34 +71,17 @@ Page({
 
   launchLottery: function (evt) {
     stompClient.send("/app/draw", {}, openId);
-    // let that = this;
-    // wx.request({
-    //   url: app.globalData.host + '/lottery/draw/' + openId,
-    //   method: 'GET',
-    //   success: function (res) {
-    //     if (res.data.msg === 'ok') {
-    //       let finalLuckyNumber = res.data.retObj.luckyNumber;
-    //       that.setData({finalLuckyNumber: finalLuckyNumber});
-    //       stompClient.send("/app/draw", {}, openId);
-    //       console.log(finalLuckyNumber);
-    //     }
-    //     //Util.showToast(msg, 'success', 2000);
-    //   },
-    //   fail: function (err) {
-    //     console.log(err);
-    //   }
-    // });
   },
   
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    //this.initSocket();
   },
 
   initSocket: function () {
-    let socketOpen = false
+    let that = this;
+    let socketOpen = false;
 
     function sendSocketMessage(msg) {
       console.log('send msg:')
@@ -119,18 +107,44 @@ Page({
     })
 
     wx.onSocketMessage(function (res) {
-      ws.onmessage(res)
+      ws.onmessage(res);
     })
 
-    let Stomp = require('../../utils/stomp.min.js').Stomp;
     Stomp.setInterval = function () { }
     Stomp.clearInterval = function () { }
     stompClient = Stomp.over(ws);
     stompClient.connect({}, function (sessionId) {
-      stompClient.subscribe('/topic/lottery', function (body, headers) {
-        console.log('From MQ:', body);
+    stompClient.subscribe('/topic/lottery', function (message) {
+        console.log('From MQ:', message.body);
+        let lotteryRes = JSON.parse(message.body);
+        that.handleLotteryResult(lotteryRes);
       });
     });
+  },
+
+  handleLotteryResult: function (result) {
+    if (result.msg === 'ok' && result.retObj) {
+      let luckyNumber = result.retObj.luckyNumber;
+      let luckyDogs = result.retObj.luckyDogs;
+      this.setData({ 
+        finalLuckyNumber: luckyNumber,
+        luckyDogs: luckyDogs
+      });
+      if (luckyDogs.length && parseInt(this.data.mypickNumber) === luckyNumber) {
+        this.setData({isLuckyDog: true});
+      }
+      if (luckyDogs.length) {
+        this.setData({
+          isLaunchBtnDisabled: true
+        });
+        // close connection
+        wx.closeSocket({
+          success: function (res) {
+            console.log("websocket连接已关闭");
+          }
+        });
+      }
+    }
   },
   
   /**
