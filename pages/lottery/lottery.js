@@ -42,6 +42,7 @@ Page({
     return isValid;
   },
   submitLuckyNumber: function (evt) {
+    let that = this;
     let pickNumber = evt.detail.value.luckyNumber;
     let isVialid = this.checkPickNumber('', pickNumber);
     if (isVialid) {
@@ -52,6 +53,13 @@ Page({
           if (res.data.msg === 'ok') {
             let msg = '抽奖号下注成功';
             Util.showToast(msg, 'success', 2000);
+            that.stompClient.connect({}, function (sessionId) {
+              that.stompClient.subscribe('/topic/lottery', function (body, headers) {
+                console.log('From MQ:', body);
+              });
+              that.stompClient.send("/app/draw", {}, JSON.stringify({ 'msg': '我是客户端' }));
+
+            });
           }
         },
         fail: function (err) {
@@ -69,7 +77,6 @@ Page({
       success: function (res) {
         if (res.data.msg === 'ok') {
           let finalLuckyNumber = res.data.retObj.luckyNumber;
-          debugger;
           that.setData({finalLuckyNumber: finalLuckyNumber});
           console.log(finalLuckyNumber);
         }
@@ -85,24 +92,51 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+    //this.initSocket();
   },
 
+  initSocket: function () {
+    let socketOpen = false
+
+    function sendSocketMessage(msg) {
+      console.log('send msg:')
+      console.log(msg);
+      if (socketOpen) {
+        wx.sendSocketMessage({
+          data: msg
+        })
+      } else {
+        socketMsgQueue.push(msg)
+      }
+    }
+
+    let ws = {
+      send: sendSocketMessage
+    }
+
+    wx.connectSocket({
+      url: 'ws://118.24.246.184:8090/t2-websocket'
+    })
+    wx.onSocketOpen(function (res) {
+      socketOpen = true
+      ws.onopen()
+    })
+
+    wx.onSocketMessage(function (res) {
+      ws.onmessage(res)
+    })
+
+    let Stomp = require('../../utils/stomp.min.js').Stomp;
+    Stomp.setInterval = function () { }
+    Stomp.clearInterval = function () { }
+    this.stompClient = Stomp.over(ws);
+  },
   
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    wx.connectSocket({
-      url: app.globalData.host + '/lottery/query/',
-      method: 'GET'
-    });
-    wx.onSocketOpen(function (res) {
-      console.log('WebSocket连接已打开！')
-    });
-    wx.onSocketMessage(function (res) {
-      console.log('收到服务器内容：' + res.data)
-    })
+    
   },
 
   /**

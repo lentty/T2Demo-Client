@@ -9,11 +9,12 @@
     <button class="submitNumberBtn" form-type="submit">提交抽奖号码      </button>
   </form>
 
-  <!-- <my-component luckNumber="{{luckyNumber}}" binddraw="myEventListener">
-  </my-component> -->
 <view class="launchLotterySection" wx:if="{{isSessionOwner}}">
   <button class="launchBtn" bindtap="launchLottery">开奖</button>
 </view>
 <view wx:if="{{!!finalLuckyNumber}}">中奖号码是{{finalLuckyNumber}}
+</view>
+<view >
+
 </view>
 </view>
