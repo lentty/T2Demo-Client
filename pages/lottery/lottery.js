@@ -3,6 +3,7 @@ import Util from '../../utils/util';
 const app = getApp();
 const openId = wx.getStorageSync('openid');
 const isSessionOwner = wx.getStorageSync('isSessionOwner');
+var stompClient = {};
 
 Page({
 
@@ -53,13 +54,7 @@ Page({
           if (res.data.msg === 'ok') {
             let msg = '抽奖号下注成功';
             Util.showToast(msg, 'success', 2000);
-            that.stompClient.connect({}, function (sessionId) {
-              that.stompClient.subscribe('/topic/lottery', function (body, headers) {
-                console.log('From MQ:', body);
-              });
-              that.stompClient.send("/app/draw", {}, JSON.stringify({ 'msg': '我是客户端' }));
-
-            });
+            that.initSocket();
           }
         },
         fail: function (err) {
@@ -70,22 +65,24 @@ Page({
   },
 
   launchLottery: function (evt) {
-    let that = this;
-    wx.request({
-      url: app.globalData.host + '/lottery/draw/' + openId,
-      method: 'GET',
-      success: function (res) {
-        if (res.data.msg === 'ok') {
-          let finalLuckyNumber = res.data.retObj.luckyNumber;
-          that.setData({finalLuckyNumber: finalLuckyNumber});
-          console.log(finalLuckyNumber);
-        }
-        //Util.showToast(msg, 'success', 2000);
-      },
-      fail: function (err) {
-        console.log(err);
-      }
-    });
+    stompClient.send("/app/draw", {}, openId);
+    // let that = this;
+    // wx.request({
+    //   url: app.globalData.host + '/lottery/draw/' + openId,
+    //   method: 'GET',
+    //   success: function (res) {
+    //     if (res.data.msg === 'ok') {
+    //       let finalLuckyNumber = res.data.retObj.luckyNumber;
+    //       that.setData({finalLuckyNumber: finalLuckyNumber});
+    //       stompClient.send("/app/draw", {}, openId);
+    //       console.log(finalLuckyNumber);
+    //     }
+    //     //Util.showToast(msg, 'success', 2000);
+    //   },
+    //   fail: function (err) {
+    //     console.log(err);
+    //   }
+    // });
   },
   
   /**
@@ -105,8 +102,6 @@ Page({
         wx.sendSocketMessage({
           data: msg
         })
-      } else {
-        socketMsgQueue.push(msg)
       }
     }
 
@@ -118,6 +113,7 @@ Page({
       url: 'ws://118.24.246.184:8090/t2-websocket'
     })
     wx.onSocketOpen(function (res) {
+      console.log("connected");
       socketOpen = true
       ws.onopen()
     })
@@ -129,7 +125,12 @@ Page({
     let Stomp = require('../../utils/stomp.min.js').Stomp;
     Stomp.setInterval = function () { }
     Stomp.clearInterval = function () { }
-    this.stompClient = Stomp.over(ws);
+    stompClient = Stomp.over(ws);
+    stompClient.connect({}, function (sessionId) {
+      stompClient.subscribe('/topic/lottery', function (body, headers) {
+        console.log('From MQ:', body);
+      });
+    });
   },
   
   /**
