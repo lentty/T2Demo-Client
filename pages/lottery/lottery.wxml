@@ -6,7 +6,7 @@
       <input name="luckyNumber" class="weui-input" type="number" placeholder="点我输入幸运数字" bindblur="checkPickNumber"></input>
       <text class="errorInputMsg" wx:if="{{!!errorInputMsg}}">{{errorInputMsg}}</text>
     </view>
-    <button class="submitNumberBtn" form-type="submit">提交抽奖号码      </button>
+    <button class="submitNumberBtn" form-type="submit" disabled="{{isSubmitBtnDisabled}}">提交抽奖号码      </button>
   </form>
 
 <view class="launchLotterySection" wx:if="{{isSessionOwner}}">

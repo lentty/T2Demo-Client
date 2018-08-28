@@ -17,6 +17,7 @@ Page({
     luckyNumber: 0,
     isLuckyDog: false,
     luckyDogs: [],
+    isSubmitBtnDisabled: false,
     isLaunchBtnDisabled: false
   },
 
@@ -61,7 +62,10 @@ Page({
           if (res.data.msg === 'ok') {
             let msg = '抽奖号下注成功';
             Util.showToast(msg, 'success', 2000);
-            that.setData({ mypickNumber: pickNumber});
+            that.setData({ 
+              mypickNumber: pickNumber,
+              isSubmitBtnDisabled: true
+            });
             that.initSocket();
           }
         },
