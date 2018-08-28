@@ -3,8 +3,8 @@ import Util from '../../utils/util';
 import {Stomp} from '../../utils/stomp.min.js';
 const app = getApp();
 const openId = wx.getStorageSync('openid');
-const isSessionOwner = wx.getStorageSync('isSessionOwner');
 let stompClient = {};
+var socketOpen = false;
 
 Page({
 
@@ -13,7 +13,7 @@ Page({
    */
   data: {
     userCount: 1,
-    isSessionOwner: isSessionOwner,
+    isSessionOwner: false,
     luckyNumber: 0,
     isLuckyDog: false,
     luckyDogs: [],
@@ -24,6 +24,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.setData({
+      isSessionOwner: app.globalData.isSessionOwner
+    });
     let that = this;
     wx.request({
       url: app.globalData.host + '/session/usercount',
@@ -81,8 +84,6 @@ Page({
 
   initSocket: function () {
     let that = this;
-    let socketOpen = false;
-
     function sendSocketMessage(msg) {
       console.log('send msg:')
       console.log(msg);
@@ -102,8 +103,8 @@ Page({
     })
     wx.onSocketOpen(function (res) {
       console.log("connected");
-      socketOpen = true
-      ws.onopen()
+      socketOpen = true;
+      ws.onopen();
     })
 
     wx.onSocketMessage(function (res) {
@@ -138,12 +139,20 @@ Page({
           isLaunchBtnDisabled: true
         });
         // close connection
-        wx.closeSocket({
-          success: function (res) {
-            console.log("websocket连接已关闭");
-          }
-        });
+        this.closeSocket();
       }
+    }
+  },
+
+  closeSocket: function(){
+    if (socketOpen) {
+      var that = this;
+      wx.closeSocket({
+        success: function (res) {
+          console.log("websocket连接已关闭");
+          socketOpen = false;
+        }
+      });
     }
   },
   
@@ -158,14 +167,14 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+    this.closeSocket();
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+    this.closeSocket();
   },
 
   /**

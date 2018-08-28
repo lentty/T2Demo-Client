@@ -20,45 +20,20 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function() {
+  onLoad: function () {
+    this.setData({
+      isSessionOwner: app.globalData.isSessionOwner
+    });
     var userInfo = wx.getStorageSync('userInfo');
-    console.log('userInfo: ' + userInfo);
     if (userInfo) {
       this.setData({
         userInfo: userInfo,
         hasUserInfo: true
       })
-    } 
-    this.setSessionOwner();
+    }
   },
 
-  setSessionOwner: function () {
-    var currentDate = Util.getCurrentDate();
-    console.log('currentDate:' + currentDate);
-    var that = this;
-    wx.request({
-      url: app.globalData.host + '/session/' + currentDate,
-      method: 'GET',
-      success: function (res) {
-        console.log(res.data);
-        if (res.data.msg == "ok") {
-          var sessionOwner = res.data.retObj.owner;
-          var openid = wx.getStorageSync('openid');
-          if (openid == sessionOwner) {
-            that.setData({
-              isSessionOwner: true
-            });
-            wx.setStorageSync('isSessionOwner', true);
-          }
-        }
-      },
-      fail: function (e) {
-        console.log('Failed to set session owner');
-      }
-    })
-  },
-
-  getUserInfo: function(e) {
+  getUserInfo: function (e) {
     console.log(e)
     if (e.detail.userInfo) {
       this.addUser(e.detail.userInfo);
@@ -67,53 +42,59 @@ Page({
     }
   },
 
-  addUser: function(user){
+  addUser: function (user) {
     var that = this;
     var openid = wx.getStorageSync('openid');
-    console.log('openid: '+openid)
-    if(openid){
-       user.id = openid;
-       wx.request({
-         url: app.globalData.host + '/user/save',
-         method: 'POST',
-         data: user,
-         success: function (res) {
-           console.log(res.data);
-           that.setData({
-             userInfo: user,
-             hasUserInfo: true
-           })
-           wx.setStorageSync('userInfo', user);
-         },
-         fail: function (e) {
-           wx.showToast({
-             title: '登录失败',
-             icon: 'none',
-             duration: 2000
-           });
-         }
-       })
+    console.log('openid: ' + openid)
+    if (openid) {
+      user.id = openid;
+      wx.request({
+        url: app.globalData.host + '/user/save',
+        method: 'POST',
+        data: user,
+        success: function (res) {
+          console.log(res.data);
+          that.setData({
+            userInfo: user,
+            hasUserInfo: true
+          })
+          wx.setStorageSync('userInfo', user);
+        },
+        fail: function (e) {
+          wx.showToast({
+            title: '登录失败',
+            icon: 'none',
+            duration: 2000
+          });
+        }
+      })
     }
   },
 
   generateCode: function (event) {
-    var openid = wx.getStorageSync('openid');
     var that = this;
-    if (openid) {
+    let isValidTime = this.validateCheckinTime();
+    if (isValidTime) {
       wx.request({
-        url: app.globalData.host + '/checkin/code/' + openid,
+        url: app.globalData.host + '/checkin/code/' + openId,
         method: 'GET',
         success: function (res) {
           console.log(res.data);
           if (res.data.msg == "ok") {
             var code = res.data.retObj;
-            that.setData({checkinCode: code});
-            that.setData({isGenerateCodeModal: false});
+            that.setData({ checkinCode: code });
+            that.setData({ isGenerateCodeModal: false });
           }
         },
         fail: function (e) {
           console.log('Failed to get checkin code');
         }
+      })
+    } else {
+      wx.showToast({
+        title: '别慌，还没到签到时间',
+        icon: 'none',
+        duration: 1000
       })
     }
   },
@@ -129,7 +110,7 @@ Page({
           var code = res.data.retObj;
           that.setData({ checkinCode: code });
         }
-      }, 
+      },
       fail: function (e) {
         console.log('Failed to get checkin code');
       }
@@ -139,48 +120,51 @@ Page({
   saveChenkinCode: function () {
     let that = this;
     this.setData({ isGenerateCodeModal: true });
-      wx.request({
-        url: app.globalData.host + '/checkin/confirm/' + openId + '/' + that.data.checkinCode,
-        method: 'GET',
-        success: function (res) {
-          if (res.data.msg === 'ok') {
-            wx.showToast({
-              title: '操作成功',
-              duration: 2000
-            })
-          } else {
-            wx.showToast({
-              title: '操作失败，请重试',
-              icon: 'none',
-              duration: 2000
-            })
-          }
-        },
-        fail: function (error) {
+    wx.request({
+      url: app.globalData.host + '/checkin/confirm/' + openId + '/' + that.data.checkinCode,
+      method: 'GET',
+      success: function (res) {
+        if (res.data.msg === 'ok') {
+          wx.showToast({
+            title: '操作成功',
+            duration: 2000
+          })
+        } else if (res.data.msg === 'checked_in') {
+          wx.showToast({
+            title: '口令已生成，请勿重复操作',
+            icon: 'none',
+            duration: 2000
+          })
+        } else {
           wx.showToast({
             title: '操作失败，请重试',
             icon: 'none',
             duration: 2000
           })
         }
-      })
+      },
+      fail: function (error) {
+        wx.showToast({
+          title: '操作失败，请重试',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
+  cancelGenerateCode: function () {
+    this.setData({ isGenerateCodeModal: true });
   },
 
   checkIn: function () {
     let isValidTime = this.validateCheckinTime();
-    //let isValidTime = true;
     if (isValidTime) {
-        this.setData({'isCheckinModalHidden': false});
+      this.setData({ 'isCheckinModalHidden': false });
     } else {
-      wx.showModal({
-        title: '错误',
-        content: '别慌，还没到签到时间',
-        showCancel: false,
-        success: function (res) {
-          if (res.confirm) {
-            console.log('用户点击确定')
-          }
-        }
+      wx.showToast({
+        title: '别慌，还没到签到时间',
+        icon: 'none',
+        duration: 1000
       })
     }
   },
@@ -190,19 +174,19 @@ Page({
     let date = new Date();
     if (date.getDay() !== 2) {
       isValid = false;
-    } else if (date.getHours() <12 || date.getHours() > 13) {
+    } else if (date.getHours() < 12 || date.getHours() > 13) {
       isValid = false;
-    } else if (date.getHours() === 12 && date.getMinutes() < 30){
+    } else if (date.getHours() === 12 && date.getMinutes() < 30) {
       isValid = false;
-    } 
+    }
     return isValid;
   },
-  resetCheckinCode: function () {
-    this.setData({checkinCode: ''});
+  cancelCheckin: function () {
+    this.setData({ isCheckinModalHidden: true });
   },
   submitCheckinCode: function () {
     let that = this;
-    this.setData({isCheckinModalHidden: true});
+    this.setData({ isCheckinModalHidden: true });
     if (openId) {
       wx.request({
         url: app.globalData.host + '/checkin/' + openId + '/' + that.data.checkinCode,
@@ -213,6 +197,12 @@ Page({
               title: '签到成功',
               duration: 2000
             })
+          } else if (res.data.msg === 'checked_in') {
+            wx.showToast({
+              title: '已签到，请勿重复操作',
+              icon: 'none',
+              duration: 2000
+            })
           } else {
             wx.showToast({
               title: '签到失败，请核对口令',
@@ -220,7 +210,6 @@ Page({
               duration: 2000
             })
           }
-          that.resetCheckinCode();
         },
         fail: function (error) {
           wx.showToast({
@@ -228,13 +217,12 @@ Page({
             icon: 'none',
             duration: 2000
           })
-          that.resetCheckinCode();
         }
       })
     }
   },
   onCodeInputBlur: function (evt) {
-    this.setData({checkinCode: evt.detail.value})
+    this.setData({ checkinCode: evt.detail.value })
   },
   validateLotteryDrawTime: function () {
     let isValid = true;
@@ -248,7 +236,7 @@ Page({
   },
   handleLotteryClick: function () {
     let isTimeValid = this.validateLotteryDrawTime();
-    if (isTimeValid) {
+    if (!isTimeValid) {
       let msg = '还未到抽奖时间';
       Util.showToast(msg, 'none', 2000);
       return;
@@ -274,49 +262,49 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {
+  onReady: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
+  onShow: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {
+  onHide: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {
+  onUnload: function () {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
+  onReachBottom: function () {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
 
   }
 })
