@@ -6,16 +6,17 @@
       <input name="luckyNumber" class="weui-input" type="number" placeholder="点我输入幸运数字" bindblur="checkPickNumber"></input>
       <text class="errorInputMsg" wx:if="{{!!errorInputMsg}}">{{errorInputMsg}}</text>
     </view>
-    <button class="submitNumberBtn" form-type="submit" disabled="{{isSubmitBtnDisabled}}">提交抽奖号码      </button>
+    <button class="submitNumberBtn" form-type="submit" disabled="{{isSubmitBtnDisabled || luckyDogs.length}}">提交抽奖号码      </button>
   </form>
 
 <view class="launchLotterySection" wx:if="{{isSessionOwner}}">
-  <button class="launchBtn" disabled="{{isLaunchBtnDisabled}}" bindtap="launchLottery">开奖</button>
+  <button class="launchBtn" disabled="{{isLaunchBtnDisabled || luckyDogs.length}}" bindtap="launchLottery">开奖</button>
 </view>
 <view class="luckNumberMsg" wx:if="{{!!finalLuckyNumber}}">中奖号码是<text>{{finalLuckyNumber}}</text>
 </view>
 <view class="myLuckyMsg" wx:if="{{isLuckyDog}}">
-  恭喜你，中奖啦！
+  <image src="../../images/luckyBack.png"></image>
+  <view>恭喜你，中奖啦</view>
 </view>
 <view class="luckyListInfo" wx:if="{{luckyDogs.length}}">
   <text>- 今日中奖名单 -</text> 

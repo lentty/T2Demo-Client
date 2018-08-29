@@ -40,11 +40,23 @@
 }
 .myLuckyMsg {
   text-align: center;
-  /* use background-image:  */
-  background: #FFF;
   margin-bottom: 0.5rem;
+  height: 5rem;
+  position: relative;
+}
+.myLuckyMsg image {
+  height: 100%;
+  width: 100%;
+}
+.myLuckyMsg >view {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.25rem;
 }
 .luckyListInfo {
+  margin-top: 1rem;
   background: #FFF;
   border-top: 1px solid #D6D9DC;
   border-bottom: 1px solid #D6D9DC;

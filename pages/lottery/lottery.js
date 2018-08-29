@@ -1,6 +1,7 @@
 // pages/lottery/lottery.js
 import Util from '../../utils/util';
-import {Stomp} from '../../utils/stomp.min.js';
+import WCache from '../../utils/wcache';
+import { Stomp } from '../../utils/stomp.min.js';
 const app = getApp();
 const openId = wx.getStorageSync('openid');
 let stompClient = {};
@@ -39,6 +40,10 @@ Page({
         console.log(err);
       }
     });
+    let storedLuckyList = WCache.get('storedLuckyDogs');
+    if (storedLuckyList && storedLuckyList.length) {
+      this.setData({luckyDogs: storedLuckyList});
+    }
   },
   checkPickNumber: function (evt, luckyNumber) {
     let pickNumber = evt ? evt.detail.value : luckyNumber;
@@ -144,6 +149,8 @@ Page({
         });
         // close connection
         this.closeSocket();
+        // store lottery result in storage within 1 hour
+        WCache.put('storedLuckyDogs', luckyDogs, 60*60);
       }
     }
   },
