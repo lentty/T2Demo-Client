@@ -21,6 +21,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function () {
+    console.log('onload');
     this.setData({
       isSessionOwner: app.globalData.isSessionOwner
     });
@@ -54,6 +55,7 @@ Page({
         data: user,
         success: function (res) {
           console.log(res.data);
+          user.status = res.data.retObj
           that.setData({
             userInfo: user,
             hasUserInfo: true
@@ -72,30 +74,31 @@ Page({
   },
 
   generateCode: function (event) {
-    var that = this;
-    let isValidTime = this.validateCheckinTime();
-    if (isValidTime) {
-      wx.request({
-        url: app.globalData.host + '/checkin/code/' + openId,
-        method: 'GET',
-        success: function (res) {
-          console.log(res.data);
-          if (res.data.msg == "ok") {
-            var code = res.data.retObj;
-            that.setData({ checkinCode: code });
-            that.setData({ isGenerateCodeModal: false });
-          }
-        },
-        fail: function (e) {
-          console.log('Failed to get checkin code');
-        }
-      })
+    var userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo) {
+      Util.showToast('请先登录', 'none', 1000);
     } else {
-      wx.showToast({
-        title: '别慌，还没到签到时间',
-        icon: 'none',
-        duration: 1000
-      })
+      var that = this;
+      let isValidTime = this.validateCheckinTime();
+      if (isValidTime) {
+        wx.request({
+          url: app.globalData.host + '/checkin/code/' + openId,
+          method: 'GET',
+          success: function (res) {
+            console.log(res.data);
+            if (res.data.msg == "ok") {
+              var code = res.data.retObj;
+              that.setData({ checkinCode: code });
+              that.setData({ isGenerateCodeModal: false });
+            }
+          },
+          fail: function (e) {
+            console.log('Failed to get checkin code');
+          }
+        })
+      } else {
+        Util.showToast('别慌，还没到签到时间', 'none', 1000);
+      }
     }
   },
 
@@ -157,15 +160,18 @@ Page({
   },
 
   checkIn: function () {
-    let isValidTime = this.validateCheckinTime();
-    if (isValidTime) {
-      this.setData({ 'isCheckinModalHidden': false });
+    var userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo) {
+      Util.showToast('请先登录', 'none', 1000);
+    } else if (userInfo.status == 0) {
+      Util.showToast('游客不能签到', 'none', 1000);
     } else {
-      wx.showToast({
-        title: '别慌，还没到签到时间',
-        icon: 'none',
-        duration: 1000
-      })
+      let isValidTime = this.validateCheckinTime();
+      if (isValidTime) {
+        this.setData({ 'isCheckinModalHidden': false });
+      } else {
+        Util.showToast('别慌，还没到签到时间', 'none', 1000);
+      }
     }
   },
   // valid time: Tuesday 12:30 ~ 13:30
@@ -235,56 +241,59 @@ Page({
     return isValid;
   },
   handleLotteryClick: function () {
-    let isTimeValid = this.validateLotteryDrawTime();
-    if (!isTimeValid) {
-      let msg = '还未到抽奖时间';
-      Util.showToast(msg, 'none', 2000);
-      return;
-    }
-    wx.request({
-      url: app.globalData.host + '/lottery/validate/' + openId,
-      method: 'GET',
-      success: function (res) {
-        if (res.data.retObj) {
-          wx.navigateTo({
-            url: '../lottery/lottery',
-          })
-        } else {
-          let errMsg = '签到完再来抽奖哦';
-          Util.showToast(errMsg, 'none', 2000);
-        }
-      },
-      fail: function (err) {
-        console.log(err);
+    var userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo) {
+      Util.showToast('请先登录', 'none', 1000);
+    } else if (userInfo.status == 0) {
+      Util.showToast('游客不能抽奖', 'none', 1000);
+    } else {
+      let isTimeValid = this.validateLotteryDrawTime();
+      if (!isTimeValid) {
+        let msg = '还未到抽奖时间';
+        Util.showToast(msg, 'none', 2000);
+        return;
       }
-    })
+      wx.request({
+        url: app.globalData.host + '/lottery/validate/' + openId,
+        method: 'GET',
+        success: function (res) {
+          if (res.data.retObj) {
+            wx.navigateTo({
+              url: '../lottery/lottery',
+            })
+          } else {
+            let errMsg = '签到完再来抽奖哦';
+            Util.showToast(errMsg, 'none', 2000);
+          }
+        },
+        fail: function (err) {
+          console.log(err);
+        }
+      })
+    }
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
   },
 
   /**
