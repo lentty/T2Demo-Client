@@ -3,7 +3,9 @@
     "pages/home/home",
     "pages/rankinglist/rankinglist",
     "pages/schedule/schedule",
-    "pages/lottery/lottery"
+    "pages/lottery/lottery",
+    "pages/uploadQuestion/uploadQuestion",
+    "pages/uploadQuestion/editQuestion"
   ],
   "window": {
     "backgroundTextStyle": "light",

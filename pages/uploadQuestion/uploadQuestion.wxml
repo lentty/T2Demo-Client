@@ -1,0 +1,5 @@
+<!--pages/uploadQuestion/uploadQuestion.wxml-->
+<text>pages/uploadQuestion/uploadQuestion.wxml</text>
+<view class="">
+  <button class="uniformBtn fixedBottomBtn" bindtap="addQuestion">添加考题</button>
+</view>

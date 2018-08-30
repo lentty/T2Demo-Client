@@ -1,0 +1,13 @@
+<!--pages/uploadQuestion/editQuestion.wxml-->
+<view class='page'>
+<form class="editQuestionForm" bindsubmit="submitQuestion">
+  <label for="title">题目:</label>
+  <input class="titleInput" name="title" placeholder="点我输入题目"></input>
+  <view>
+    <text class="addOptionTitle">添加答案选项</text>
+    <label for="">a:</label>
+    <input class="optionInput" name="option" placeholder="点我输入选项"></input>
+  </view>
+  <button class="uniformBtn saveQuestionBtn">保存</button>
+</form>
+</view>

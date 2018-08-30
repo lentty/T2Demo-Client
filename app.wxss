@@ -38,3 +38,15 @@
 page {
   background-color: #f6f7f8;
 }
+
+.uniformBtn {
+  background: #414A90;
+  width: 95%;
+  color: #FFF;
+}
+
+.fixedBottomBtn {
+  position: fixed;
+  bottom: 0;
+  left: 2.5%;
+}

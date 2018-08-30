@@ -31,7 +31,7 @@
       <view class="weui-cell__bd">开始答题</view>
       <view class="weui-cell__ft weui-cell__ft_in-access"></view>
     </navigator>
-    <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+    <navigator url="../uploadQuestion/uploadQuestion" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
       <view class="weui-cell__hd">
         <image src="../../images/qanda.png" class="navIcon"></image>
       </view>
