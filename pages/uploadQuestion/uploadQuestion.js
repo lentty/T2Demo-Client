@@ -1,4 +1,8 @@
 // pages/uploadQuestion/uploadQuestion.js
+import Util from '../../utils/util';
+
+const app = getApp();
+const openId = wx.getStorageSync('openid');
 Page({
 
   /**
@@ -12,12 +16,47 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    let that = this;
+    wx.request({
+      url: app.globalData.host + '/question/load/' + openId,
+      method: 'GET',
+      success: function (res) {
+        if(res.data.msg === 'ok') {
+          that.setData({ questions: res.data.retObj });
+        }
+      }
+    })
   },
 
   addQuestion: function () {
-    wx.navigateTo({
-      url: 'editQuestion',
+    if (this.data.questions.length >=3) {
+      Util.showToast('最多只能添加3道题呢', 'none', 2000);
+    } else {
+      wx.navigateTo({
+        url: 'editQuestion',
+      })
+    }
+  },
+
+  deleteQuestion: function (evt) {
+    let that = this;
+    let quesIndex = evt.target.dataset.quesindex;
+    let quesId = this.data.questions[quesIndex].id;
+    wx.request({
+      url: app.globalData.host + '/question/delete/' + openId +'/' + quesId,
+      method: 'DELETE',
+      success: function (res) {
+        if (res.data.msg === 'ok') {
+          Util.showToast('删除成功', 'success', 2000);
+          that.data.questions.splice(quesIndex, 1);
+          that.setData({ questions: that.data.questions });
+        } else {
+          Util.showToast('操作失败', 'none', 2000);
+        }
+      },
+      fail: function (error) {
+        console.log(error);
+      }
     })
   },
 
@@ -32,7 +71,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
   },
 
   /**

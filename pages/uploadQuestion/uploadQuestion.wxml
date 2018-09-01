@@ -1,5 +1,13 @@
 <!--pages/uploadQuestion/uploadQuestion.wxml-->
-<text>pages/uploadQuestion/uploadQuestion.wxml</text>
 <view class="">
+  <view class="questionContainer" wx:for="{{questions}}" wx:key="index">
+    <View>
+      {{index + 1}}: {{item.content}}?
+      <image class="deleteQuesIcon" data-quesIndex="{{index}}" src="../../images/roundedRemove.png" bindtap="deleteQuestion"></image>
+    </View>
+    <view class="option" wx:for="{{item.options}}" wx:key="index" wx:for-item="option">
+      {{option.number}}: {{option.content}}
+    </view>
+  </view>
   <button class="uniformBtn fixedBottomBtn" bindtap="addQuestion">添加考题</button>
 </view>

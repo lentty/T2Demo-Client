@@ -15,3 +15,15 @@
 .saveQuestionBtn {
   margin-top: 1rem;
 }
+.addQuesIcon image, .deleteIcon{
+  height: 1.25rem;
+  width: 1.25rem;
+}
+.deleteIcon {
+  margin-left:0.5rem;
+}
+
+.picker {
+  border-bottom:1px solid #D7D7D7;
+  border-top:1px solid #D7D7D7;
+}
