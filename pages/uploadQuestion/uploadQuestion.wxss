@@ -1,12 +1,21 @@
 /* pages/uploadQuestion/uploadQuestion.wxss */
+.questionHeader {
+  display: flex;
+}
+.questionTitle {
+  flex: 1;
+}
 .option {
   color:#586069;
 }
+.editQuesIcon {
+  height: 1.8rem;
+  width: 1.8rem;
+  margin-right: 0.8rem;
+}
 .deleteQuesIcon {
-  height: 1.25rem;
-  width: 1.25rem;
-  position: absolute;
-  right: 0.5rem;
+  height: 1.8rem;
+  width: 1.8rem;
 }
 .questionContainer >view:first-child {
   background: #FFF;

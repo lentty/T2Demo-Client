@@ -2,7 +2,7 @@
 <view class='page'>
 <form class="editQuestionForm" bindsubmit="submitQuestion">
   <label for="title">题目:</label>
-  <input class="titleInput" name="title" placeholder="点我输入题目"></input>
+  <input class="titleInput" name="title" placeholder="点我输入题目" value="{{title}}"></input>
   <view>
     <text class="addOptionTitle">添加答案选项(2-4个)</text>
     <view wx:for="{{options}}" wx:key="index" >

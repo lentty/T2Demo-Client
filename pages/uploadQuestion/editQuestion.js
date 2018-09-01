@@ -29,7 +29,32 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    let that = this;
+    let quesInfoStr = options.quesInfoStr;
+    if (quesInfoStr) {
+      let questionObj = JSON.parse(quesInfoStr);
+      let options = questionObj.options.map((obj, index) => {
+        if (!that.data.optionValues.includes(obj.number)) {
+          this.data.optionValues.push(obj.number);
+        }
+        if (obj.isAnswer) {
+          that.setData({
+            correctOption: {index: index}
+          });
+        }
+        return {
+          label: obj.number,
+          value: obj.content,
+        }
+      })
+
+      this.setData({
+        id: questionObj.id,
+        title: questionObj.content,
+        options: options,
+        optionValues: this.data.optionValues
+      });
+    }
   },
 
   handleAddQuesClick: function () {
@@ -93,14 +118,15 @@ Page({
     wx.request({
       url: app.globalData.host + '/question/edit',
       method: 'post',
-      data: {
+      data: { 
+        id: this.data.id,
         owner: openId,
         content: evt.detail.value.title,
         options: options
       },
       success: function (res) {
         if (res.data.msg === 'ok') {
-          Util.showToast('添加成功', 'success', 1000);
+          Util.showToast('保存成功', 'success', 1000);
           setTimeout(function() {
             wx.redirectTo({
               url: 'uploadQuestion'

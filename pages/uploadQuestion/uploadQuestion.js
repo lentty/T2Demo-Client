@@ -38,6 +38,14 @@ Page({
     }
   },
 
+  editQuestion: function (evt) {
+    let quesIndex = evt.target.dataset.quesindex;
+    let quesInfoStr = JSON.stringify(this.data.questions[quesIndex]);
+    wx.navigateTo({
+      url:'editQuestion?quesInfoStr=' + quesInfoStr
+    })
+  },
+
   deleteQuestion: function (evt) {
     let that = this;
     let quesIndex = evt.target.dataset.quesindex;

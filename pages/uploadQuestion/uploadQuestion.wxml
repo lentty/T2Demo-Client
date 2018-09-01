@@ -1,9 +1,14 @@
 <!--pages/uploadQuestion/uploadQuestion.wxml-->
 <view class="">
   <view class="questionContainer" wx:for="{{questions}}" wx:key="index">
-    <View>
+    <View class="questionHeader">
+      <view class="questionTitle">
       {{index + 1}}: {{item.content}}?
-      <image class="deleteQuesIcon" data-quesIndex="{{index}}" src="../../images/roundedRemove.png" bindtap="deleteQuestion"></image>
+      </view>
+      <view class="">
+        <image class="editQuesIcon" data-quesIndex="{{index}}" src="../../images/edit.png" bindtap="editQuestion"></image>
+        <image class="deleteQuesIcon" data-quesIndex="{{index}}" src="../../images/roundedRemove.png" bindtap="deleteQuestion"></image>
+      </view>
     </View>
     <view class="option" wx:for="{{item.options}}" wx:key="index" wx:for-item="option">
       {{option.number}}: {{option.content}}
