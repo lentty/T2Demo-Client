@@ -106,37 +106,57 @@ Page({
   },
 
   submitQuestion: function (evt) {
-    let correctOptionLabel = this.data.optionValues[this.data.correctOption.index];
-    let options = this.data.options.map(option => {
-      return {
-        number: option.label,
-        content: option.value,
-        isAnswer: option.label === correctOptionLabel ? 1 : 0
-      }
-    });
-    wx.request({
-      url: app.globalData.host + '/question/edit',
-      method: 'post',
-      data: { 
-        id: this.data.id,
-        owner: app.globalData.openId,
-        content: evt.detail.value.title,
-        options: options
-      },
-      success: function (res) {
-        if (res.data.msg === 'ok') {
-          Util.showToast('保存成功', 'success', 1000);
-          setTimeout(function() {
-            wx.redirectTo({
-              url: 'uploadQuestion'
-            })
-          }, 1000);
+    let isValid = this.validateQuestionContent(evt.detail.value);
+    if (isValid) {
+      let correctOptionLabel = this.data.optionValues[this.data.correctOption.index];
+      let options = this.data.options.map(option => {
+        return {
+          number: option.label,
+          content: option.value,
+          isAnswer: option.label === correctOptionLabel ? 1 : 0
         }
-      },
-      fail: function (error) {
-        console.log(error);
+      });
+      wx.request({
+        url: app.globalData.host + '/question/edit',
+        method: 'post',
+        data: { 
+          id: this.data.id,
+          owner: app.globalData.openId,
+          content: evt.detail.value.title,
+          options: options
+        },
+        success: function (res) {
+          if (res.data.msg === 'ok') {
+            Util.showToast('保存成功', 'success', 1000);
+            setTimeout(function() {
+              wx.redirectTo({
+                url: 'uploadQuestion'
+              })
+            }, 1000);
+          }
+        },
+        fail: function (error) {
+          console.log(error);
+        }
+      });
+    }
+  },
+
+  validateQuestionContent: function (questionCont) {
+    let isValid = true;
+    if (!questionCont.title.trim()) {
+      isValid = false;
+      Util.showToast('题目不能为空', 'none', 2000);
+      return isValid;
+    }
+    for (let i=0; i<this.data.options.length; i++) {
+      if (!this.data.options[i].value.trim()) {
+        isValid = false;
+        Util.showToast('选项内容不能为空', 'none', 2000);
+        break;
       }
-    })
+    }
+    return isValid;
   },
 
   /**
