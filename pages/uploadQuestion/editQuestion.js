@@ -2,7 +2,6 @@
 import Util from '../../utils/util';
 
 const app = getApp();
-const openId = wx.getStorageSync('openid');
 Page({
 
   /**
@@ -120,7 +119,7 @@ Page({
       method: 'post',
       data: { 
         id: this.data.id,
-        owner: openId,
+        owner: app.globalData.openId,
         content: evt.detail.value.title,
         options: options
       },

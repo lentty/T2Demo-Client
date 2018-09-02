@@ -1,4 +1,5 @@
 // pages/schedule/schedule.js
+import Util from '../../utils/util';
 const app = getApp();
 
 Page({
@@ -14,6 +15,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+      this.init();
+  },
+
+  init: function(){
     var that = this;
     wx.request({
       url: app.globalData.host + '/session/list',
@@ -25,11 +30,7 @@ Page({
         });
       },
       fail: function (e) {
-        wx.showToast({
-          title: '数据获取失败',
-          icon: 'none',
-          duration: 2000
-        });
+        Util.showToast('数据获取失败', 'none', 2000);
       }
     });
   },
@@ -38,6 +39,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
+
   
   },
 
@@ -59,14 +61,13 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-  
+      this.init();
   },
 
   /**

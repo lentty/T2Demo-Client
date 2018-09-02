@@ -2,7 +2,6 @@
 import Util from '../../utils/util';
 
 const app = getApp();
-const openId = wx.getStorageSync('openid');
 Page({
 
   /**
@@ -18,7 +17,7 @@ Page({
   onLoad: function (options) {
     let that = this;
     wx.request({
-      url: app.globalData.host + '/exam/load/' + openId,
+      url: app.globalData.host + '/exam/load/' + app.globalData.openId,
       method: 'GET',
       success: function (res) {
         if (res.data.msg === 'ok') {

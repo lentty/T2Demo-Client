@@ -212,6 +212,7 @@ Page({
       Util.showToast('游客不能抽奖', 'none', 1000);
     } else {
       let isTimeValid = this.validateLotteryDrawTime();
+      //let isTimeValid = true;
       if (!isTimeValid) {
         let msg = '还未到抽奖时间';
         Util.showToast(msg, 'none', 2000);

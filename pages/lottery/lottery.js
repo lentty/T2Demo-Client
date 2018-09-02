@@ -3,7 +3,6 @@ import Util from '../../utils/util';
 import WCache from '../../utils/wcache';
 import { Stomp } from '../../utils/stomp.min.js';
 const app = getApp();
-const openId = wx.getStorageSync('openid');
 let stompClient = {};
 var socketOpen = false;
 
@@ -61,7 +60,7 @@ Page({
     let isVialid = this.checkPickNumber('', pickNumber);
     if (isVialid) {
       wx.request({
-        url: app.globalData.host + '/lottery/bet/' + openId + '/' + pickNumber,
+        url: app.globalData.host + '/lottery/bet/' + app.globalData.openId + '/' + pickNumber,
         method: 'GET',
         success: function (res) {
           if (res.data.msg === 'ok') {
@@ -88,7 +87,7 @@ Page({
       success: function(res){
         if(res.confirm){
           if (socketOpen) {
-            stompClient.send("/app/draw", {}, openId);
+            stompClient.send("/app/draw", {}, app.globalData.openId);
           }
         }
       }

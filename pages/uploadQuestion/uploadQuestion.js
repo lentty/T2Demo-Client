@@ -15,6 +15,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log('uploadQuestion:onLoad:openid:' + app.globalData.openId)
     let that = this;
     wx.request({
       url: app.globalData.host + '/question/load/' + app.globalData.openId,

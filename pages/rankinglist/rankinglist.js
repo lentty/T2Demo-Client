@@ -1,5 +1,6 @@
 //index.js
 //获取应用实例
+import Util from '../../utils/util';
 const app = getApp()
 
 Page({
@@ -9,15 +10,19 @@ Page({
     rankingList: []
   },
   onLoad: function () {
+    
+  },
+
+  init: function(){
     var userInfo = wx.getStorageSync('userInfo');
-    if(userInfo.status == 1){
-      this.setData({normalUser: false});
+    if (userInfo.status == 1) {
+      this.setData({ normalUser: false });
     }
     var that = this;
     wx.request({
       url: app.globalData.host + '/ranking/list',
       method: 'GET',
-      success: function (res){
+      success: function (res) {
         console.log(res.data);
         that.setData({
           rankingList: res.data
@@ -25,14 +30,11 @@ Page({
         that.findMyRanking();
       },
       fail: function (e) {
-        wx.showToast({
-          title: '数据获取失败',
-          icon: 'none',
-          duration: 2000
-        });
+        Util.showToast('数据获取失败','none',2000);
       }
     })
   },
+
   findMyRanking: function () {
     let myId = wx.getStorageSync('userInfo').id; 
     let status = wx.getStorageSync('userInfo').status; 
@@ -42,5 +44,16 @@ Page({
         myRanking: myRanking
       });
     }
+  },
+
+  onShow: function(){
+    console.log('rankinglist::onShow');
+    this.init();
+  },
+
+  onPullDownRefresh: function(){
+    console.log('rankinglist::onPullDownRefresh');
+    this.init();
   }
+
 })
