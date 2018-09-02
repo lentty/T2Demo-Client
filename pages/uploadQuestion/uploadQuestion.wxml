@@ -7,7 +7,7 @@
       </view>
       <view class="">
         <image class="editQuesIcon" data-quesIndex="{{index}}" src="../../images/edit.png" bindtap="editQuestion"></image>
-        <image class="deleteQuesIcon" data-quesIndex="{{index}}" src="../../images/roundedRemove.png" bindtap="deleteQuestion"></image>
+        <image class="deleteQuesIcon" data-quesIndex="{{index}}" src="../../images/roundedRemove.png" bindtap="handleDeleteQuestionClick"></image>
       </view>
     </View>
     <view class="option" wx:for="{{item.options}}" wx:key="index" wx:for-item="option">

@@ -46,12 +46,23 @@ Page({
     })
   },
 
-  deleteQuestion: function (evt) {
+  handleDeleteQuestionClick: function (evt) {
     let that = this;
-    let quesIndex = evt.target.dataset.quesindex;
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除吗？',
+      success: function (res) {
+        if (res.confirm) {
+          that.deleteQuestion(evt.target.dataset.quesindex);
+        }
+      }
+    });
+  },
+  deleteQuestion: function (quesIndex) {
+    let that = this;
     let quesId = this.data.questions[quesIndex].id;
     wx.request({
-      url: app.globalData.host + '/question/delete/' + app.globalData.openId +'/' + quesId,
+      url: app.globalData.host + '/question/delete/' + app.globalData.openId + '/' + quesId,
       method: 'DELETE',
       success: function (res) {
         if (res.data.msg === 'ok') {
@@ -67,7 +78,6 @@ Page({
       }
     })
   },
-
   publishQuestions: function () {
     if (app.globalData.isSessionOwner) {
       wx.request({
