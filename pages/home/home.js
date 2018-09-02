@@ -20,10 +20,16 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function () {
-    console.log('home::onLoad::isSessionOwner:' + app.globalData.isSessionOwner)
-    if (app.globalData.isSessionOwner != '') {
-      this.setData({ isSessionOwner: app.globalData.isSessionOwner });
-    } 
+    console.log('home::onLoad::openId:' + app.globalData.openId)
+    var that = this;
+    if (!app.globalData.openId) {
+      app.openIdCallback = openId => {
+        console.log('home::openIdCallback:' + openId)
+        if (openId) {
+          that.setSessionOwner(openId)
+        }
+      }
+    }
     var userInfo = wx.getStorageSync('userInfo');
     if (userInfo) {
       this.setData({
@@ -75,6 +81,7 @@ Page({
     } else {
       var that = this;
       let isValidTime = this.validateCheckinTime();
+      //let isValidTime = true;
       if (isValidTime) {
         wx.request({
           url: app.globalData.host + '/checkin/code/' + app.globalData.openId,
@@ -263,6 +270,32 @@ Page({
       })
     }
   },
+
+  setSessionOwner: function (openid) {
+    var currentDate = Util.getCurrentDate();
+    console.log('currentDate:' + currentDate);
+    var that = this;
+    wx.request({
+      url: app.globalData.host + '/session/' + currentDate,
+      method: 'GET',
+      success: function (res) {
+        console.log(res.data);
+        if (res.data.msg == "ok") {
+          var sessionOwner = res.data.retObj.owner;
+          if (openid == sessionOwner) {
+            app.globalData.isSessionOwner = true
+          } else {
+            app.globalData.isSessionOwner = false;
+          }
+        } else {
+          app.globalData.isSessionOwner = false;
+        }
+        that.setData({
+          isSessionOwner: app.globalData.isSessionOwner
+        })
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -274,13 +307,8 @@ Page({
    */
   onShow: function () {
     console.log('home::onShow::isSessionOwner:' + app.globalData.isSessionOwner)
-    app.isSessionOwnerCallback = isSessionOwner => {
-      console.log('home::callback::isSessionOwner:' + isSessionOwner)
-      if (isSessionOwner != '') {
-        this.setData({
-          isSessionOwner: isSessionOwner,
-        });
-      }
+    if(app.globalData.openId){
+      this.setSessionOwner(app.globalData.openId)
     }
   },
 
@@ -300,28 +328,10 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    var currentDate = Util.getCurrentDate();
-    console.log('currentDate:' + currentDate);
-    var that = this;
-    wx.request({
-      url: app.globalData.host + '/session/' + currentDate,
-      method: 'GET',
-      success: function (res) {
-        console.log(res.data);
-        if (res.data.msg == "ok") {
-          var sessionOwner = res.data.retObj.owner;
-          if (app.globalData.openId == sessionOwner) {
-            app.globalData.isSessionOwner = true;
-          } else {
-            app.globalData.isSessionOwner = false;
-          }
-        } else {
-          app.globalData.isSessionOwner = false;
-        }
-        console.log('home::onPullDownRefresh::isSessionOwner:' + app.globalData.isSessionOwner)
-        that.setData({ isSessionOwner: app.globalData.isSessionOwner });
-      }
-    })
+    console.log('home::onPullDownRefresh::isSessionOwner:' + app.globalData.isSessionOwner)
+    if (app.globalData.openId) {
+      this.setSessionOwner(app.globalData.openId)
+    }
   },
 
   /**

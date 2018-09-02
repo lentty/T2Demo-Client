@@ -117,7 +117,7 @@ Page({
     }
 
     wx.connectSocket({
-      url: 'ws://'+ app.globalData.wshost+'/t2-websocket'
+      url: app.globalData.wshost+'/t2-websocket'
     })
     wx.onSocketOpen(function (res) {
       console.log("connected");
@@ -125,12 +125,21 @@ Page({
       ws.onopen();
     })
 
+    wx.onSocketError(function (res) {
+      console.log('WebSocket连接打开失败，请检查！' + res)
+    })
+
     wx.onSocketMessage(function (res) {
+      console.log('wx.onSocketMessage', res);
       ws.onmessage(res);
     })
 
-    Stomp.setInterval = function () { }
-    Stomp.clearInterval = function () { }
+    Stomp.setInterval = function (interval, f) {
+      return setInterval(f, interval);
+    }
+    Stomp.clearInterval = function (id) {
+      return clearInterval(id);
+    }
     stompClient = Stomp.over(ws);
     stompClient.connect({}, function (sessionId) {
     stompClient.subscribe('/topic/lottery', function (message) {
