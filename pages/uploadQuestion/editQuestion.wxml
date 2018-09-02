@@ -8,10 +8,10 @@
     <view wx:for="{{options}}" wx:key="index" >
       <label name="item.label" for="">{{item.label}}:</label>
       <input class="optionInput" name="{{item.label}}" data-index="{{index}}" placeholder="点我输入选项" value="{{item.value}}" bindblur="onOptionChange"></input>
-      <image wx:if="{{index >=2 }}" class="deleteIcon" src="../../images/roundedRemove.png" data-index="{{index}}" bindtap="handleDeleteOptionClick"></image>
+      <image wx:if="{{index >=2 }}" class="deleteIcon" src="../../images/rounded_delete.png" data-index="{{index}}" bindtap="handleDeleteOptionClick"></image>
     </view>
     <view class="imgWrapper addQuesIcon">
-      <image src="../../images/plus.png" bindtap="handleAddQuesClick"></image>
+      <image src="../../images/add_outline.png" bindtap="handleAddQuesClick"></image>
     </view>
     <picker value="{{correctOption.index}}" range="{{optionValues}}" bindchange="onCorrectOptionChange">
       <view class="picker">
