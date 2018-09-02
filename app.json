@@ -5,7 +5,8 @@
     "pages/schedule/schedule",
     "pages/lottery/lottery",
     "pages/uploadQuestion/uploadQuestion",
-    "pages/uploadQuestion/editQuestion"
+    "pages/uploadQuestion/editQuestion",
+    "pages/exam/exam"
   ],
   "window": {
     "backgroundTextStyle": "light",

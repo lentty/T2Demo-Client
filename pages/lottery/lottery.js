@@ -82,7 +82,17 @@ Page({
   },
 
   launchLottery: function (evt) {
-    stompClient.send("/app/draw", {}, openId);
+    wx.showModal({
+      title: '提示',
+      content: '确定开奖吗？',
+      success: function(res){
+        if(res.confirm){
+          if (socketOpen) {
+            stompClient.send("/app/draw", {}, openId);
+          }
+        }
+      }
+    })
   },
   
   /**
@@ -108,7 +118,7 @@ Page({
     }
 
     wx.connectSocket({
-      url: 'ws://118.24.246.184:8090/t2-websocket'
+      url: 'ws://'+ app.globalData.wshost+'/t2-websocket'
     })
     wx.onSocketOpen(function (res) {
       console.log("connected");

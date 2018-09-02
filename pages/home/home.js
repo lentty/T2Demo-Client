@@ -1,7 +1,6 @@
 // pages/home/home.js
 import Util from '../../utils/util';
 const app = getApp();
-const openId = wx.getStorageSync('openid');
 
 Page({
 
@@ -21,10 +20,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function () {
-    console.log('onload');
-    this.setData({
-      isSessionOwner: app.globalData.isSessionOwner
-    });
+    console.log('home::onLoad::isSessionOwner:' + app.globalData.isSessionOwner)
+    if (app.globalData.isSessionOwner != '') {
+      this.setData({ isSessionOwner: app.globalData.isSessionOwner });
+    } 
     var userInfo = wx.getStorageSync('userInfo');
     if (userInfo) {
       this.setData({
@@ -63,11 +62,7 @@ Page({
           wx.setStorageSync('userInfo', user);
         },
         fail: function (e) {
-          wx.showToast({
-            title: '登录失败',
-            icon: 'none',
-            duration: 2000
-          });
+            Util.showToast('登录失败', 'none', 1500);
         }
       })
     }
@@ -76,13 +71,13 @@ Page({
   generateCode: function (event) {
     var userInfo = wx.getStorageSync('userInfo');
     if (!userInfo) {
-      Util.showToast('请先登录', 'none', 1000);
+      Util.showToast('请先登录', 'none', 1500);
     } else {
       var that = this;
       let isValidTime = this.validateCheckinTime();
       if (isValidTime) {
         wx.request({
-          url: app.globalData.host + '/checkin/code/' + openId,
+          url: app.globalData.host + '/checkin/code/' + app.globalData.openId,
           method: 'GET',
           success: function (res) {
             console.log(res.data);
@@ -105,7 +100,7 @@ Page({
   changeCheckinCode: function () {
     let that = this;
     wx.request({
-      url: app.globalData.host + '/checkin/code/' + openId,
+      url: app.globalData.host + '/checkin/code/' + app.globalData.openId,
       method: 'GET',
       success: function (res) {
         console.log(res.data);
@@ -124,37 +119,23 @@ Page({
     let that = this;
     this.setData({ isGenerateCodeModal: true });
     wx.request({
-      url: app.globalData.host + '/checkin/confirm/' + openId + '/' + that.data.checkinCode,
+      url: app.globalData.host + '/checkin/confirm/' + app.globalData.openId + '/' + that.data.checkinCode,
       method: 'GET',
       success: function (res) {
         if (res.data.msg === 'ok') {
-          wx.showToast({
-            title: '操作成功',
-            duration: 2000
-          })
+          Util.showToast('操作成功', 'success', 2000);
         } else if (res.data.msg === 'checked_in') {
-          wx.showToast({
-            title: '口令已生成，请勿重复操作',
-            icon: 'none',
-            duration: 2000
-          })
+          Util.showToast('口令已生成，请勿重复操作', 'none', 2000);
         } else {
-          wx.showToast({
-            title: '操作失败，请重试',
-            icon: 'none',
-            duration: 2000
-          })
+          Util.showToast('操作失败，请重试', 'none', 2000);
         }
       },
       fail: function (error) {
-        wx.showToast({
-          title: '操作失败，请重试',
-          icon: 'none',
-          duration: 2000
-        })
+        Util.showToast('操作失败，请重试', 'none', 2000);
       }
     })
   },
+
   cancelGenerateCode: function () {
     this.setData({ isGenerateCodeModal: true });
   },
@@ -162,19 +143,19 @@ Page({
   checkIn: function () {
     var userInfo = wx.getStorageSync('userInfo');
     if (!userInfo) {
-      Util.showToast('请先登录', 'none', 1000);
+      Util.showToast('请先登录', 'none', 1500);
     } else if (userInfo.status == 0) {
-      Util.showToast('游客不能签到', 'none', 1000);
+      Util.showToast('游客不能签到', 'none', 1500);
     } else {
       let isValidTime = this.validateCheckinTime();
       if (isValidTime) {
         this.setData({ 'isCheckinModalHidden': false });
       } else {
-        Util.showToast('别慌，还没到签到时间', 'none', 1000);
+        Util.showToast('别慌，还没到签到时间', 'none', 1500);
       }
     }
   },
-  // valid time: Tuesday 12:30 ~ 13:30
+  // valid time: Tuesday 12:30 ~ 13:00
   validateCheckinTime: function () {
     let isValid = true;
     let date = new Date();
@@ -193,39 +174,22 @@ Page({
   submitCheckinCode: function () {
     let that = this;
     this.setData({ isCheckinModalHidden: true });
-    if (openId) {
-      wx.request({
-        url: app.globalData.host + '/checkin/' + openId + '/' + that.data.checkinCode,
-        method: 'GET',
-        success: function (res) {
-          if (res.data.msg === 'ok') {
-            wx.showToast({
-              title: '签到成功',
-              duration: 2000
-            })
-          } else if (res.data.msg === 'checked_in') {
-            wx.showToast({
-              title: '已签到，请勿重复操作',
-              icon: 'none',
-              duration: 2000
-            })
-          } else {
-            wx.showToast({
-              title: '签到失败，请核对口令',
-              icon: 'none',
-              duration: 2000
-            })
-          }
-        },
-        fail: function (error) {
-          wx.showToast({
-            title: '签到失败',
-            icon: 'none',
-            duration: 2000
-          })
+    wx.request({
+      url: app.globalData.host + '/checkin/' + app.globalData.openId + '/' + that.data.checkinCode,
+      method: 'GET',
+      success: function (res) {
+        if (res.data.msg === 'ok') {
+          Util.showToast('签到成功', 'none', 2000);
+        } else if (res.data.msg === 'checked_in') {
+          Util.showToast('已签到，请勿重复操作', 'none', 2000);
+        } else {
+          Util.showToast('签到失败，请核对口令', 'none', 2000);
         }
-      })
-    }
+      },
+      fail: function (error) {
+        Util.showToast('签到失败', 'none', 2000);
+      }
+    })
   },
   onCodeInputBlur: function (evt) {
     this.setData({ checkinCode: evt.detail.value })
@@ -254,7 +218,7 @@ Page({
         return;
       }
       wx.request({
-        url: app.globalData.host + '/lottery/validate/' + openId,
+        url: app.globalData.host + '/lottery/validate/' + app.globalData.openId,
         method: 'GET',
         success: function (res) {
           if (res.data.retObj) {
@@ -272,6 +236,32 @@ Page({
       })
     }
   },
+
+  addQuestion: function () {
+    var userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo) {
+      Util.showToast('请先登录', 'none', 1000);
+    } else if (userInfo.status == 0) {
+      Util.showToast('游客不能添加考题', 'none', 1000);
+    } else {
+      wx.navigateTo({
+        url: '../uploadQuestion/uploadQuestion',
+      })
+    }
+  },
+
+  startExam: function () {
+    var userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo) {
+      Util.showToast('请先登录', 'none', 1000);
+    } else if (userInfo.status == 0) {
+      Util.showToast('游客不能答题', 'none', 1000);
+    } else {
+      wx.navigateTo({
+        url: '../exam/exam',
+      })
+    }
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -282,6 +272,15 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    console.log('home::onShow::isSessionOwner:' + app.globalData.isSessionOwner)
+    app.isSessionOwnerCallback = isSessionOwner => {
+      console.log('home::callback::isSessionOwner:' + isSessionOwner)
+      if (isSessionOwner != '') {
+        this.setData({
+          isSessionOwner: isSessionOwner,
+        });
+      }
+    }
   },
 
   /**
@@ -300,7 +299,28 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    var currentDate = Util.getCurrentDate();
+    console.log('currentDate:' + currentDate);
+    var that = this;
+    wx.request({
+      url: app.globalData.host + '/session/' + currentDate,
+      method: 'GET',
+      success: function (res) {
+        console.log(res.data);
+        if (res.data.msg == "ok") {
+          var sessionOwner = res.data.retObj.owner;
+          if (app.globalData.openId == sessionOwner) {
+            app.globalData.isSessionOwner = true;
+          } else {
+            app.globalData.isSessionOwner = false;
+          }
+        } else {
+          app.globalData.isSessionOwner = false;
+        }
+        console.log('home::onPullDownRefresh::isSessionOwner:' + app.globalData.isSessionOwner)
+        that.setData({ isSessionOwner: app.globalData.isSessionOwner });
+      }
+    })
   },
 
   /**

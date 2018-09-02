@@ -2,9 +2,12 @@
 import Util from 'utils/util';
 App({
   globalData: {
-    // host: 'http://localhost:8090',
-    host: 'http://118.24.246.184:8090',
-    isSessionOwner: false
+     //host: 'http://localhost:8090',
+     // wshost:'localhost:8090',
+     host: 'http://118.24.246.184:8090',
+     wshost: '118.24.246.184:8090',
+     isSessionOwner: false,
+     openId:''
   },
   data: {
     appid: 'wx65da69f2afcc249c',
@@ -12,8 +15,9 @@ App({
     api: 'https://api.weixin.qq.com/sns/jscode2session?'
   },
   onLaunch: function () {
+    console.log('app::onLaunch')
     var openid = wx.getStorageSync('openid');
-    if (!openid) {
+    if (openid == '') {
       var that = this
       // 登录
       wx.login({
@@ -29,42 +33,52 @@ App({
               success: res => {
                 console.log(res.data);
                 if (res.data.openid) {
+                  that.globalData.openId = res.data.openid
                   wx.setStorageSync('openid', res.data.openid);
-                  that.setSessionOwner(res.data.openid);
+                  that.setSessionOwner(res.data.openid);               
                 }
               }
             })
           }
         }
       })
+    } else {
+      this.globalData.openId = openid
     }
   },
 
   onShow: function(){
+    console.log('app::onShow')
     var openid = wx.getStorageSync('openid');
-    this.setSessionOwner(openid);
+    if(openid){
+      this.setSessionOwner(openid);
+    }
   },
 
   setSessionOwner: function (openid) {
-      var currentDate = Util.getCurrentDate();
-      console.log('currentDate:' + currentDate);
-      var that = this;
-      wx.request({
-        url: that.globalData.host + '/session/' + currentDate,
-        method: 'GET',
-        success: function (res) {
-          console.log(res.data);
-          if (res.data.msg == "ok") {
-            var sessionOwner = res.data.retObj.owner;
-            if (openid == sessionOwner) {
-              that.globalData.isSessionOwner = true
-              console.log('global data isSessionOwner:' + that.globalData.isSessionOwner);
-            } 
+    var currentDate = Util.getCurrentDate();
+    console.log('currentDate:' + currentDate);
+    var that = this;
+    wx.request({
+      url: that.globalData.host + '/session/' + currentDate,
+      method: 'GET',
+      success: function (res) {
+        console.log(res.data);
+        if (res.data.msg == "ok") {
+          var sessionOwner = res.data.retObj.owner;
+          if (openid == sessionOwner) {
+            that.globalData.isSessionOwner = true
+          } else {
+            that.globalData.isSessionOwner = false;
           }
-        },
-        fail: function (e) {
-          console.log('Failed to set session owner');
+        } else {
+          that.globalData.isSessionOwner = false;
         }
-      })
+        console.log('app::onshow::isSessionOwner:' + that.globalData.isSessionOwner)
+        if (that.isSessionOwnerCallback) {
+          that.isSessionOwnerCallback(that.globalData.isSessionOwner)
+        }
+      }
+    })
   }
 })

@@ -1,0 +1,19 @@
+/* pages/exam/exam.wxss */
+
+.checkbox-group{
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.option {
+  color:#586069;
+}
+
+.questionContainer >view:first-child {
+  background: #FFF;
+}
+.questionContainer >view {
+  padding: 0.5rem;
+}

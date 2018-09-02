@@ -1,0 +1,12 @@
+<!--pages/exam/exam.wxml-->
+<view class="">
+  <view class="questionContainer" wx:for="{{questions}}" wx:key="index">
+    <View>
+      {{index + 1}}: {{item.content}}?
+    </View>
+      <view class="option" wx:for="{{item.options}}" wx:key="index" wx:for-item="option">
+        <checkbox value="{{option.number}}">{{option.number}}:</checkbox>  {{option.content}}
+      </view>
+  </view>
+  <button class="uniformBtn fixedBottomBtn" bindtap="submitAnswer">提交</button>
+</view>
