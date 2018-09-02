@@ -2,7 +2,6 @@
 import Util from '../../utils/util';
 
 const app = getApp();
-const openId = wx.getStorageSync('openid');
 Page({
 
   /**
@@ -18,7 +17,7 @@ Page({
   onLoad: function (options) {
     let that = this;
     wx.request({
-      url: app.globalData.host + '/question/load/' + openId,
+      url: app.globalData.host + '/question/load/' + app.globalData.openId,
       method: 'GET',
       success: function (res) {
         if(res.data.msg === 'ok') {
@@ -51,7 +50,7 @@ Page({
     let quesIndex = evt.target.dataset.quesindex;
     let quesId = this.data.questions[quesIndex].id;
     wx.request({
-      url: app.globalData.host + '/question/delete/' + openId +'/' + quesId,
+      url: app.globalData.host + '/question/delete/' + app.globalData.openId +'/' + quesId,
       method: 'DELETE',
       success: function (res) {
         if (res.data.msg === 'ok') {
@@ -69,7 +68,27 @@ Page({
   },
 
   publishQuestions: function () {
-    console.log('publish questions');
+    if (app.globalData.isSessionOwner) {
+      wx.request({
+        url: app.globalData.host + '/question/publish/' + app.globalData.openId,
+        method: 'GET',
+        success: function (res) {
+          if (res.data.msg === 'ok') {
+            Util.showToast('发布成功', 'success', 2000);
+          } else if (res.data.msg === 'not_authorized') {
+            Util.showToast('当前主讲人才能发布哦', 'none', 2000);
+          } else if (res.data.msg === 'not_today') {
+            Util.showToast('周二才能发布哦', 'none', 2000);
+          }
+        },
+        fail: function (error) {
+          console.log(error);
+        }
+      })
+    } else {
+      Util.showToast('当前主讲人才能发布哦', 'none', 2000);
+    }
+
   },
 
   /**
