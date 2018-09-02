@@ -68,6 +68,10 @@ Page({
     })
   },
 
+  publishQuestions: function () {
+    console.log('publish questions');
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

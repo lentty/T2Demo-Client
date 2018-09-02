@@ -23,3 +23,12 @@
 .questionContainer >view {
   padding: 0.5rem;
 }
+.publishQuesBtn, .addQuesBtn {
+  width: 42%;
+} 
+.publishQuesBtn {
+  left: 4%;
+}
+.addQuesBtn {
+  right: 4%; 
+}
