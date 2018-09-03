@@ -296,6 +296,28 @@ Page({
       }
     })
   },
+
+  logout: function () {
+    var userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo) {
+      Util.showToast('未登录', 'none', 1500);
+    } else {
+      var that = this;
+      wx.showModal({
+        title: '提示',
+        content: '确定退出',
+        success: function (res) {
+          if (res.confirm) {
+            wx.removeStorageSync('userInfo');
+            that.setData({
+              userInfo: {},
+              hasUserInfo: false
+            })
+          }
+        }
+      })
+    }
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
