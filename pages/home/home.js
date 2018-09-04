@@ -162,15 +162,15 @@ Page({
       }
     }
   },
-  // valid time: Tuesday 12:30 ~ 13:00
+  // valid time: Tuesday 12:30 ~ 12:59:59
   validateCheckinTime: function () {
     let isValid = true;
     let date = new Date();
     if (date.getDay() !== 2) {
       isValid = false;
-    } else if (date.getHours() < 12 || date.getHours() > 13) {
+    } else if (date.getHours() < 12 || date.getHours() >= 13) {
       isValid = false;
-    } else if (date.getHours() === 12 && date.getMinutes() < 30) {
+    } else if (date.getMinutes() < 30) {
       isValid = false;
     }
     return isValid;
@@ -201,12 +201,13 @@ Page({
   onCodeInputBlur: function (evt) {
     this.setData({ checkinCode: evt.detail.value })
   },
+  // valid time: 13:00~13:59:59
   validateLotteryDrawTime: function () {
     let isValid = true;
     let date = new Date();
     if (date.getDay() !== 2) {
       isValid = false;
-    } else if (date.getHours() < 13 || date.getHours() > 14) {
+    } else if (date.getHours() !== 13) {
       isValid = false;
     }
     return isValid;
