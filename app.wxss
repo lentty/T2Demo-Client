@@ -56,7 +56,7 @@ page {
 
 .fixedBottomBtn {
   position: fixed;
-  bottom: 0.5rem;
+  bottom: 18rpx;
 }
 .imgWrapper image{
   max-width: 100%;
