@@ -267,7 +267,7 @@ Page({
       Util.showToast('游客不能答题', 'none', 1000);
     } else {
       wx.navigateTo({
-        url: '../exam/exam',
+        url: '../exam/examList',
       })
     }
   },

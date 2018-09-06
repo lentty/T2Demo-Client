@@ -1,0 +1,5 @@
+/* pages/exam/examList.wxss */
+.sessionDate {
+  color: #586069;
+  font-size: 28rpx;
+}
