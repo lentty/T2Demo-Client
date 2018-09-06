@@ -1,12 +1,18 @@
 <!--pages/exam/exam.wxml-->
 <view class="">
   <view class="questionContainer" wx:for="{{questions}}" wx:key="index">
-    <View>
+    <view>
       {{index + 1}}: {{item.content}}?
-    </View>
-      <view class="option" wx:for="{{item.options}}" wx:key="index" wx:for-item="option">
+    </view>
+    <!-- <view class="option" wx:for="{{item.options}}" wx:key="index" wx:for-item="option">
         <checkbox value="{{option.number}}">{{option.number}}:</checkbox>  {{option.content}}
-      </view>
+    </view> -->
+    <radio-group class="radio-group" bindchange="radioChange">
+      <label class="radioOption" wx:for="{{item.options}}" wx:for-item="option">
+      <radio value="{{option.number}}" checked=""/>
+      {{option.number}}: {{option.content}}
+      </label>
+</radio-group>
   </view>
   <button class="uniformBtn fixedBottomBtn" bindtap="submitAnswer">提交</button>
 </view>
