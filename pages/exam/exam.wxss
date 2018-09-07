@@ -26,3 +26,7 @@ radio .wx-radio-input.wx-radio-input-checked{
 .submitExamrBtn {
   left: 2.5%;
 }
+
+.correctOptionStyle {
+  background: #F9DC5C;
+}

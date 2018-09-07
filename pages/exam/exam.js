@@ -33,11 +33,40 @@ Page({
     let answer = evt.detail.value;
     this.data.answers[questionId] = answer;
     this.setData({answers: this.data.answers});
+    // strore my answer
+    this.data.questions[quesIndex].myAnswer = answer;
   },
   submitExam: function () {
+    let that = this;
     let isValid = this.validateAnswers();
     if (!isValid) {
       Util.showToast('还有题目未作答', 'none', 2000);
+    } else {
+      wx.request({
+        url: app.globalData.host + '/exam/submit',
+        method: 'POST',
+        data: {
+          userId: app.globalData.openId,
+          answerMap: this.data.answers
+        },
+        success: function (res) {
+          if (res.data.msg === 'ok') {
+            let msg = '答对题数: ' + res.data.retObj.points;
+            Util.showToast(msg, 'success', 2000);
+            that.setData({correctAnswerMap: res.data.retObj.answerMap})
+
+            // put correct answer into this.data.questions
+            that.data.questions = that.data.questions.map((question) => {
+              question.correctOption = that.data.correctAnswerMap[question.id];
+              return question;
+            });
+            that.setData({ questions: that.data.questions});
+          }
+        },
+        fail: function (error) {
+          console.log(error);
+        }
+      })
     }
     console.log(this.data);
   },
