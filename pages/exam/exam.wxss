@@ -15,8 +15,14 @@
 .questionContainer >view {
   padding: 0.5rem;
 }
-
+.questionContainer >radio-group {
+  padding: 18rpx;
+}
 radio .wx-radio-input.wx-radio-input-checked{
   background: #414A90!important; 
   border: 1px solid #414A90 !important;
+}
+
+.submitExamrBtn {
+  left: 2.5%;
 }

@@ -8,7 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    questions: [],
+    answers: {}
   },
 
   /**
@@ -17,7 +18,7 @@ Page({
   onLoad: function (options) {
     let that = this;
     wx.request({
-      url: app.globalData.host + '/exam/load/' + app.globalData.openId,
+      url: app.globalData.host + '/exam/load/question/' + options.sessionId,
       method: 'GET',
       success: function (res) {
         if (res.data.msg === 'ok') {
@@ -25,6 +26,32 @@ Page({
         }
       }
     })
+  },
+  handleAnswerChange: function (evt) {
+    let quesIndex = evt.currentTarget.dataset.quesindex;
+    let questionId = this.data.questions[quesIndex].id;
+    let answer = evt.detail.value;
+    this.data.answers[questionId] = answer;
+    this.setData({answers: this.data.answers});
+  },
+  submitExam: function () {
+    let isValid = this.validateAnswers();
+    if (!isValid) {
+      Util.showToast('还有题目未作答', 'none', 2000);
+    }
+    console.log(this.data);
+  },
+
+  validateAnswers: function () {
+    let isValid = true;
+    for (let i=0; i<this.data.questions.length; i++) {
+      let question = this.data.questions[i];
+      if (!this.data.answers.hasOwnProperty(question.id)) {
+        isValid = false;
+        break;
+      }
+    }
+    return isValid;
   },
 
   /**

@@ -32,6 +32,13 @@ Page({
     })
   },
 
+  goToExamDetailPage: function (evt) {
+    let sessionId = evt.currentTarget.dataset.sessionid;
+    wx.navigateTo({
+      url: 'exam?sessionId=' + sessionId,
+    })
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

@@ -1,8 +1,4 @@
 /* pages/uploadQuestion/uploadQuestion.wxss */
-.questionsWrapper {
-  margin-bottom: 114rpx;
-}
-
 .questionHeader {
   display: flex;
 }

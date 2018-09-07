@@ -1,8 +1,8 @@
 <!--pages/exam/examList.wxml-->
 <view class="page">
   <view class="weui-cells">
-    <view class="examItem weui-cell weui-cell_access" hover-class="weui-cell_active" wx:for="{{examList}}" wx:key="owner">
-      <view class="weui-cell__bd" bindtap="">
+    <view class="examItem weui-cell weui-cell_access" hover-class="weui-cell_active" wx:for="{{examList}}" wx:key="id">
+      <view class="weui-cell__bd" data-sessionid="{{item.id}}" bindtap="goToExamDetailPage">
       {{item.title}} 
       <text class="sessionDate">{{item.date}}</text>
       </view>
