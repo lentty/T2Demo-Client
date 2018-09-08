@@ -133,6 +133,13 @@ Page({
                 url: 'uploadQuestion'
               })
             }, 1000);
+          } else if (res.data.msg === 'exceed_threshold'){
+            Util.showToast('本赛季出题数已达上限', 'none', 1000);
+            setTimeout(function () {
+              wx.redirectTo({
+                url: 'uploadQuestion'
+              })
+            }, 1000);
           }
         },
         fail: function (error) {

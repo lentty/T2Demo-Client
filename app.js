@@ -4,8 +4,10 @@ App({
   globalData: {
      //host: 'http://localhost:8090',
      //wshost:'ws://localhost:8090',
-     host: 'https://fangxincq.com',
-     wshost: 'wss://fangxincq.com',
+     //host: 'https://fangxincq.com',
+     //wshost: 'wss://fangxincq.com',
+     host: 'https://api.techtuesday.club',
+     wshost: 'wss://api.techtuesday.club',
      isSessionOwner: false,
      openId:''
   },
