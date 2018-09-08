@@ -1,5 +1,6 @@
 // pages/exam/exam.js
 import Util from '../../utils/util';
+import WCache from '../../utils/wcache';
 
 const app = getApp();
 Page({
@@ -9,7 +10,9 @@ Page({
    */
   data: {
     questions: [],
-    answers: {}
+    answers: {},
+    isExamAvailable: false,
+    isSubmitBtnDisabled: false
   },
 
   /**
@@ -22,10 +25,31 @@ Page({
       method: 'GET',
       success: function (res) {
         if (res.data.msg === 'ok') {
-          that.setData({ questions: res.data.retObj });
+          let isExamAvailable = res.data.retObj.length > 0 && res.data.retObj[0].options[0].isAnswer === null;
+          that.setData({ 
+            questions: res.data.retObj,
+            isExamAvailable: isExamAvailable
+          });
+          let isExamSubmitted = WCache.get('isExamSubmitted') || false;
+          that.setData({ isExamSubmitted: isExamSubmitted });
+          if (isExamAvailable && isExamSubmitted) {
+            // put correct answer into per question
+            let correctAnswerMap = WCache.get('correctAnswerMap');
+            that.setCorrectAnswerOfExam(correctAnswerMap);
+          }
         }
       }
-    })
+    });
+  },
+  setCorrectAnswerOfExam: function (answerMap) {
+    for (let i=0; i< this.data.questions.length; i++) {
+      let question = this.data.questions[i];
+      question.options = question.options.map(function (option) {
+        option.isAnswer = answerMap[option.questionId] === option.number;
+        return option;
+      });
+    }
+    this.setData({questions: this.data.questions});
   },
   handleAnswerChange: function (evt) {
     let quesIndex = evt.currentTarget.dataset.quesindex;
@@ -53,7 +77,10 @@ Page({
           if (res.data.msg === 'ok') {
             let msg = '答对题数: ' + res.data.retObj.points;
             Util.showToast(msg, 'success', 2000);
-            that.setData({correctAnswerMap: res.data.retObj.answerMap})
+            that.setData({
+              correctAnswerMap: res.data.retObj.answerMap,
+              isSubmitBtnDisabled: true
+            })
 
             // put correct answer into this.data.questions
             that.data.questions = that.data.questions.map((question) => {
@@ -61,6 +88,9 @@ Page({
               return question;
             });
             that.setData({ questions: that.data.questions});
+
+            WCache.put('isExamSubmitted', true, 60*60*12);
+            WCache.put('correctAnswerMap', that.data.correctAnswerMap, 60*60*12);
           } else if (res.data.msg === 'not_authorized' && res.data.status === -1){
             Util.showToast('您今天不能答题哦', 'none', 2000);
           } else if (res.data.msg === 'submitted' && res.data.status === -1) {
