@@ -8,6 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    availableExam: [],
     examList: []
   },
 
@@ -21,9 +22,20 @@ Page({
       method: 'GET',
       success: function (res) {
         if (res.data.msg === 'ok') {
-          that.setData({
-            examList: res.data.retObj
-          });
+          if (res.data.retObj.length > 0) {
+            if (res.data.retObj[0].date === Util.getCurrentDate()) {
+              that.data.availableExam = res.data.retObj[0];
+              res.data.retObj.splice(0, 1);
+              that.setData({
+                availableExam: [that.data.availableExam],
+                examList: res.data.retObj
+              });
+            } else {
+              that.setData({
+                examList: res.data.retObj
+              });
+            }
+          }
         }
       },
       fail: function (error) {
