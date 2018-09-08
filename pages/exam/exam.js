@@ -61,6 +61,10 @@ Page({
               return question;
             });
             that.setData({ questions: that.data.questions});
+          } else if (res.data.msg === 'not_authorized' && res.data.status === -1){
+            Util.showToast('您今天不能答题哦', 'none', 2000);
+          } else if (res.data.msg === 'submitted' && res.data.status === -1) {
+            Util.showToast('请勿重复提交', 'none', 2000);
           }
         },
         fail: function (error) {
