@@ -331,6 +331,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    this.setData({ checkinCode: '' });
     console.log('home::onShow::isSessionOwner:' + app.globalData.isSessionOwner)
     if(app.globalData.openId){
       this.setSessionOwner(app.globalData.openId)
