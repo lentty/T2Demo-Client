@@ -155,6 +155,7 @@ Page({
       Util.showToast('游客不能签到', 'none', 1500);
     } else {
       let isValidTime = this.validateCheckinTime();
+      //let isValidTime = true;
       if (isValidTime) {
         this.setData({ 'isCheckinModalHidden': false });
       } else {
@@ -176,7 +177,7 @@ Page({
     return isValid;
   },
   cancelCheckin: function () {
-    this.setData({ isCheckinModalHidden: true });
+    this.setData({ isCheckinModalHidden: true});
   },
   submitCheckinCode: function () {
     let that = this;
@@ -186,7 +187,7 @@ Page({
       method: 'GET',
       success: function (res) {
         if (res.data.msg === 'ok') {
-          Util.showToast('签到成功', 'none', 2000);
+          Util.showToast('签到成功', 'success', 2000);
         } else if (res.data.msg === 'checked_in') {
           Util.showToast('已签到，请勿重复操作', 'none', 2000);
         } else {
@@ -198,7 +199,8 @@ Page({
       }
     })
   },
-  onCodeInputBlur: function (evt) {
+
+  onCodeInput: function (evt) {
     this.setData({ checkinCode: evt.detail.value })
   },
   // valid time: 13:00~13:59:59

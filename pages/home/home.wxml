@@ -54,7 +54,7 @@
   </view>
   <modal id="codeInputModal" hidden="{{isCheckinModalHidden}}" title="请输入签到口令" confirm-text="提交" cancel-text="取消" 
   bindconfirm="submitCheckinCode" bindcancel="cancelCheckin"> 
-    <input bindblur="onCodeInputBlur" type='text' placeholder="点我输入口令" value="{{checkinCode}}" auto-focus/>
+    <input bindinput="onCodeInput" type='text' placeholder="点我输入口令" value="{{checkinCode}}" auto-focus/>
   </modal>
   <modal id="generateCodeModal" hidden="{{isGenerateCodeModal}}" title="签到口令" cancel-text="取消" confirm-text="确定" 
   bindconfirm="saveChenkinCode" bindcancel="cancelGenerateCode"> 
