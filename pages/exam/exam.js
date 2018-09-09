@@ -93,6 +93,8 @@ Page({
             WCache.put('correctAnswerMap', that.data.correctAnswerMap, 60*60*12);
           } else if (res.data.msg === 'not_authorized' && res.data.status === -1){
             Util.showToast('您今天不能答题哦', 'none', 2000);
+          } else if (res.data.msg === 'not_authorized' && res.data.status === -2) {
+            Util.showToast('请签完到再来答题', 'none', 2000);
           } else if (res.data.msg === 'submitted' && res.data.status === -1) {
             Util.showToast('请勿重复提交', 'none', 2000);
           }
