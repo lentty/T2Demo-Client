@@ -16,12 +16,16 @@ Page({
    */
   onLoad: function (options) {
     console.log('uploadQuestion:onLoad:openid:' + app.globalData.openId)
+    this.loadQuestions();
+  },
+
+  loadQuestions: function(){
     let that = this;
     wx.request({
       url: app.globalData.host + '/question/load/' + app.globalData.openId,
       method: 'GET',
       success: function (res) {
-        if(res.data.msg === 'ok') {
+        if (res.data.msg === 'ok') {
           that.setData({ questions: res.data.retObj });
         }
       }
@@ -78,7 +82,9 @@ Page({
       }
     })
   },
+  
   publishQuestions: function () {
+    var that = this;
     if (app.globalData.isSessionOwner) {
       if (this.data.questions.length != 3) {
         Util.showToast('凑够3道题才能发布哦', 'none', 2000);
@@ -89,6 +95,7 @@ Page({
           success: function (res) {
             if (res.data.msg === 'ok') {
               Util.showToast('发布成功', 'success', 2000);
+              that.loadQuestions();
             } else if (res.data.msg === 'not_authorized') {
               Util.showToast('当前主讲人才能发布哦', 'none', 2000);
             } else if (res.data.msg === 'not_today') {
