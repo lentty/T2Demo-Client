@@ -60,18 +60,38 @@ Page({
         data: user,
         success: function (res) {
           console.log(res.data);
-          user.status = res.data.retObj
+          user.status = 0;
           that.setData({
             userInfo: user,
             hasUserInfo: true
           })
           wx.setStorageSync('userInfo', user);
+          that.setUserStatus(user);        
         },
         fail: function (e) {
             Util.showToast('登录失败', 'none', 1500);
         }
       })
     }
+  },
+
+  setUserStatus: function (user) {
+    var that = this;
+    wx.request({
+      url: app.globalData.host + '/user/' + app.globalData.openId,
+      method: 'GET',
+      success: function (res) {
+        console.log(res.data);
+        if (res.data.msg === "ok") {
+          var ret = res.data.retObj;
+          if(user.status !== ret.status){
+            user.status = ret.status;
+            console.log('set user status as ' + user.status);
+            wx.setStorageSync('userInfo', user);
+          }
+        }
+      }
+    });
   },
 
   generateCode: function (event) {
@@ -334,7 +354,11 @@ Page({
     this.setData({ checkinCode: '' });
     console.log('home::onShow::isSessionOwner:' + app.globalData.isSessionOwner)
     if(app.globalData.openId){
-      this.setSessionOwner(app.globalData.openId)
+      this.setSessionOwner(app.globalData.openId);
+      var userInfo = wx.getStorageSync('userInfo');
+      if (userInfo) {
+        this.setUserStatus(userInfo);
+      }
     }
   },
 

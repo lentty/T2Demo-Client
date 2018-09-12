@@ -15,7 +15,7 @@ Page({
 
   init: function(){
     var userInfo = wx.getStorageSync('userInfo');
-    if (userInfo.status == 1) {
+    if (userInfo.status != 0) {
       this.setData({ normalUser: false });
     }
     var that = this;
@@ -38,7 +38,7 @@ Page({
   findMyRanking: function () {
     let myId = wx.getStorageSync('userInfo').id; 
     let status = wx.getStorageSync('userInfo').status; 
-    if(status == 1){
+    if(status != 0){
       let myRanking = this.data.rankingList.filter(item => item.userId === myId)[0];
       this.setData({
         myRanking: myRanking
