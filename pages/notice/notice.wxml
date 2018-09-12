@@ -1,0 +1,10 @@
+<!--pages/notice/notice.wxml-->
+<view class="page">
+  <view class="noticeHeader">
+    <text>公告板</text>
+    <image src="../../images/edit.png"></image>
+  </view>
+  <view class="notice">
+  {{notice.content}}
+  </view>
+</view>

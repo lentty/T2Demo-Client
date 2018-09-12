@@ -1,0 +1,20 @@
+/* pages/notice/notice.wxss */
+.noticeHeader {
+  text-align: center;
+}
+.noticeHeader >text {
+  font-size: 40rpx;
+}
+.noticeHeader image {
+  position: absolute;
+  right: 8rpx;
+  top: 64rpx;
+  width: 64rpx;
+  height: 64rpx;
+  z-index: 999;
+}
+.notice {
+  height: 300rpx;
+  background: #FCEFB4;
+  padding: 10rpx;
+}
