@@ -14,7 +14,7 @@
       <image src="../../images/add_outline.png" bindtap="handleAddQuesClick"></image>
     </view>
     <picker value="{{correctOption.index}}" range="{{optionValues}}" bindchange="onCorrectOptionChange">
-      <view class="picker">
+      <view class="containerBorder">
         选取正确答案: {{optionValues[correctOption.index]}}
       </view>
     </picker>

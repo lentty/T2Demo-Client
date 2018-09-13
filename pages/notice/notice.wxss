@@ -1,5 +1,6 @@
 /* pages/notice/notice.wxss */
 .noticeHeader {
+  padding: 10rpx;
   text-align: center;
 }
 .noticeHeader >text {

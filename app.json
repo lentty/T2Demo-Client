@@ -1,13 +1,15 @@
 {
   "pages": [
     "pages/home/home",
+    "pages/notice/notice",
     "pages/rankinglist/rankinglist",
     "pages/schedule/schedule",
     "pages/lottery/lottery",
     "pages/uploadQuestion/uploadQuestion",
     "pages/uploadQuestion/editQuestion",
     "pages/exam/exam",
-    "pages/exam/examList"
+    "pages/exam/examList",
+    "pages/notice/editNotice"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -26,6 +28,12 @@
         "text": "排行榜",
         "iconPath": "images/home.png",
         "selectedIconPath": "images/home_fill.png"
+      },
+      {
+        "pagePath": "pages/notice/notice",
+        "text": "公告",
+        "iconPath": "images/notification.png",
+        "selectedIconPath": "images/notification_fill.png"
       },
       {
         "pagePath": "pages/home/home",

@@ -65,3 +65,8 @@ page {
 .questionsWrapper {
   margin-bottom: 114rpx;
 }
+
+.containerBorder {
+  border-bottom:1px solid #D7D7D7;
+  border-top:1px solid #D7D7D7;
+}
