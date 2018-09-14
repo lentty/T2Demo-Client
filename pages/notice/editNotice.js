@@ -1,4 +1,7 @@
 // pages/notice/editNotice.js
+import Util from '../../utils/util';
+const app = getApp();
+
 Page({
 
   /**
@@ -18,11 +21,21 @@ Page({
   saveNotice: function (evt) {
     let content = evt.detail.value.noticeCont;
     wx.request({
-      url: '',
+      url: app.globalData.host + '/announcement/edit',
       method: 'POST',
+      data: {
+        content: 'leetcode 208',
+        createdBy: app.globalData.openId,
+        lastModifiedBy: app.globalData.openId
+      },
       success: function (res) {
         if (res.data.msg === 'ok') {
-          Util.showToast('保存成功', 'success', 2000);
+          Util.showToast('保存成功', 'success', 1000);
+          setTimeout(function () {
+            wx.redirectTo({
+              url: 'notice',
+            })
+          }, 1000);
         }
       },
       fail: function (error) {
