@@ -18,4 +18,12 @@
   height: 300rpx;
   background: #FCEFB4;
   padding: 10rpx;
+  position: relative;
+}
+.lastUpdateInfo {
+  position: absolute;
+  right: 6rpx;
+  top: 220rpx;
+  color: #aaa;
+  font-size: 32rpx;
 }

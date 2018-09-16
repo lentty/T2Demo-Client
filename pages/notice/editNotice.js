@@ -24,7 +24,7 @@ Page({
       url: app.globalData.host + '/announcement/edit',
       method: 'POST',
       data: {
-        content: 'leetcode 208',
+        content: content,
         createdBy: app.globalData.openId,
         lastModifiedBy: app.globalData.openId
       },
@@ -32,9 +32,9 @@ Page({
         if (res.data.msg === 'ok') {
           Util.showToast('保存成功', 'success', 1000);
           setTimeout(function () {
-            wx.redirectTo({
-              url: 'notice',
-            })
+            wx.reLaunch({
+              url: 'notice'
+            });
           }, 1000);
         }
       },

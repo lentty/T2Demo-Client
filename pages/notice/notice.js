@@ -21,7 +21,11 @@ Page({
       method: 'GET',
       success: function (res) {
         if (res.data.msg === 'ok') {
-          that.setData({ notice: res.data.retObj[0]})
+          let notice = res.data.retObj[0];
+          notice.lastModifiedDate = notice.lastModifiedDate.split(' ')[0];
+          that.setData({ 
+            notice: notice
+          });
         }
       },
       fail: function (error) {
