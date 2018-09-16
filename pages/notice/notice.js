@@ -15,6 +15,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+  },
+
+  init: function(){
     let that = this;
     wx.request({
       url: app.globalData.host + '/announcement/list',
@@ -24,7 +27,7 @@ Page({
           let notice = res.data.retObj[0];
           if (notice) {
             notice.lastModifiedDate = notice.lastModifiedDate.split(' ')[0];
-            that.setData({ 
+            that.setData({
               notice: notice
             });
           }
@@ -57,7 +60,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+     this.init();
   },
 
   /**
