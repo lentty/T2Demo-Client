@@ -3,6 +3,7 @@
     "pages/home/home",
     "pages/notice/notice",
     "pages/rankinglist/rankinglist",
+    "pages/rankinglist/rankingdetail",
     "pages/schedule/schedule",
     "pages/lottery/lottery",
     "pages/uploadQuestion/uploadQuestion",
