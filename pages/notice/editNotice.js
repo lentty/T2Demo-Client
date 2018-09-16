@@ -8,6 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    noticeId: '',
     content: ''
   },
 
@@ -15,7 +16,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({content: options.noticeCont});
+    this.setData({
+      noticeId: options.noticeId,
+      content: options.noticeCont
+    });
   },
 
   saveNotice: function (evt) {
@@ -24,6 +28,7 @@ Page({
       url: app.globalData.host + '/announcement/edit',
       method: 'POST',
       data: {
+        id: this.data.noticeId,
         content: content,
         createdBy: app.globalData.openId,
         lastModifiedBy: app.globalData.openId

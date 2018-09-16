@@ -3,9 +3,9 @@
   <view class="noticeHeader">
     <text>公告板</text>
   </view>
-  <view class="notice" bindtap="editAnnouncement">
+  <view class="notice" bindtap="editAnnouncement" data-noticeid="{{notice.id}}">
   {{notice.content}}
-  <text class="lastUpdateInfo">
+  <text class="lastUpdateInfo" wx:if="{{!!notice.content}}">
   由 {{notice.lastModifiedBy}} 发布于 {{notice.lastModifiedDate}}
   </text>
   </view>

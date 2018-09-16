@@ -22,10 +22,12 @@ Page({
       success: function (res) {
         if (res.data.msg === 'ok') {
           let notice = res.data.retObj[0];
-          notice.lastModifiedDate = notice.lastModifiedDate.split(' ')[0];
-          that.setData({ 
-            notice: notice
-          });
+          if (notice) {
+            notice.lastModifiedDate = notice.lastModifiedDate.split(' ')[0];
+            that.setData({ 
+              notice: notice
+            });
+          }
         }
       },
       fail: function (error) {
@@ -34,16 +36,14 @@ Page({
     })
   },
 
-  editAnnouncement: function () {
+  editAnnouncement: function (evt) {
+    let noticeId = evt.currentTarget.dataset.noticeid;
     let userInfo = wx.getStorageSync('userInfo');
     if (userInfo.status === 2) {
       wx.navigateTo({
-        url: 'editNotice?noticeCont=' + this.data.notice.content,
+        url: 'editNotice?noticeId=' + noticeId + '&noticeCont=' + this.data.notice.content,
       })
     }
-    wx.navigateTo({
-      url: 'editNotice?noticeCont=' + this.data.notice.content,
-    });
   },
 
   /**
