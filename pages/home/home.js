@@ -1,5 +1,6 @@
 // pages/home/home.js
 import Util from '../../utils/util';
+import WCache from '../../utils/wcache';
 const app = getApp();
 
 Page({
@@ -96,8 +97,12 @@ Page({
 
   generateCode: function (event) {
     var userInfo = wx.getStorageSync('userInfo');
+    var isCheckedIn = WCache.get('checkedIn');
+    console.log('generateCode::isCheckedIn from cache: ' + isCheckedIn)
     if (!userInfo) {
       Util.showToast('请先登录', 'none', 1500);
+    } else if (isCheckedIn){
+      Util.showToast('今天口令已生成', 'none', 1500);
     } else {
       var that = this;
       let isValidTime = this.validateCheckinTime();
@@ -151,6 +156,7 @@ Page({
       success: function (res) {
         if (res.data.msg === 'ok') {
           Util.showToast('操作成功', 'success', 2000);
+          WCache.put('checkedIn', true, 24 * 60 * 60);
         } else if (res.data.msg === 'checked_in') {
           Util.showToast('口令已生成，请勿重复操作', 'none', 2000);
         } else {
@@ -169,10 +175,14 @@ Page({
 
   checkIn: function () {
     var userInfo = wx.getStorageSync('userInfo');
+    var isCheckedIn = WCache.get('checkedIn');
+    console.log('checkIn::isCheckedIn from cache: ' + isCheckedIn)
     if (!userInfo) {
       Util.showToast('请先登录', 'none', 1500);
     } else if (userInfo.status == 0) {
       Util.showToast('游客不能签到', 'none', 1500);
+    } else if (isCheckedIn) {
+      Util.showToast('今天已签到', 'none', 1500);
     } else {
       let isValidTime = this.validateCheckinTime();
       //let isValidTime = true;
@@ -208,6 +218,7 @@ Page({
       success: function (res) {
         if (res.data.msg === 'ok') {
           Util.showToast('签到成功', 'success', 2000);
+          WCache.put('checkedIn', true, 24 * 60 * 60);
         } else if (res.data.msg === 'checked_in') {
           Util.showToast('已签到，请勿重复操作', 'none', 2000);
         } else {
@@ -236,35 +247,25 @@ Page({
   },
   handleLotteryClick: function () {
     var userInfo = wx.getStorageSync('userInfo');
+    var isCheckedIn = WCache.get('checkedIn');
+    console.log('handleLotteryClick::isCheckedIn from cache: ' + isCheckedIn)
     if (!userInfo) {
       Util.showToast('请先登录', 'none', 1000);
     } else if (userInfo.status == 0) {
       Util.showToast('游客不能抽奖', 'none', 1000);
+    } else if (!isCheckedIn){
+      Util.showToast('签到完再来抽奖哦', 'none', 1000);
     } else {
       let isTimeValid = this.validateLotteryDrawTime();
       //let isTimeValid = true;
       if (!isTimeValid) {
         let msg = '还未到抽奖时间';
         Util.showToast(msg, 'none', 2000);
-        return;
-      }
-      wx.request({
-        url: app.globalData.host + '/lottery/validate/' + app.globalData.openId,
-        method: 'GET',
-        success: function (res) {
-          if (res.data.retObj) {
-            wx.navigateTo({
-              url: '../lottery/lottery',
-            })
-          } else {
-            let errMsg = '签到完再来抽奖哦';
-            Util.showToast(errMsg, 'none', 2000);
-          }
-        },
-        fail: function (err) {
-          console.log(err);
-        }
-      })
+      } else {
+        wx.navigateTo({
+          url: '../lottery/lottery',
+        }) 
+      }    
     }
   },
 

@@ -43,10 +43,12 @@ Page({
               url: 'notice'
             });
           }, 1000);
+        }else{
+          Util.showToast('保存失败', 'none', 1000);
         }
       },
       fail: function (error) {
-        console.log(error);
+        Util.showToast('保存失败', 'none', 1000);
       }
     })
   },
