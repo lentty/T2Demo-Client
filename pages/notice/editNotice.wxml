@@ -5,7 +5,7 @@
   </view>
   <form bindsubmit="saveNotice">
     <view class="containerBorder">
-      <textarea name="noticeCont" placeholder="请输入内容" value="{{content}}" ></textarea>
+      <textarea name="noticeCont" placeholder="请输入内容" value="{{content}}" auto-focus></textarea>
     </view>
     <button class="uniformBtn saveBtn" form-type="submit">保存</button>
   </form>
