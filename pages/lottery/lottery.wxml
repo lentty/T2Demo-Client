@@ -3,7 +3,7 @@
   <form bindsubmit="submitLuckyNumber">
     <view class="inputSection">
       <label for="luckyNumber">请输入抽奖数字(1-{{userCount}}之间)          </label>
-      <input name="luckyNumber" class="weui-input" type="number" placeholder="点我输入幸运数字" bindblur="checkPickNumber" value="{{mypickNumber}}"></input>
+      <input name="luckyNumber" class="weui-input" type="number" placeholder="点我输入幸运数字" bindblur="checkPickNumber" value="{{mypickNumber}}" disabled="{{isSubmitBtnDisabled}}"></input>
       <text class="errorInputMsg" wx:if="{{!!errorInputMsg}}">{{errorInputMsg}}</text>
     </view>
     <button class="submitNumberBtn" form-type="submit" disabled="{{isSubmitBtnDisabled || luckyDogs.length}}">提交抽奖号码      </button>

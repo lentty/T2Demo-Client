@@ -12,7 +12,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userCount: 0,
+    userCount: 1,
     isSessionOwner: false,
     mypickNumber: '',
     luckyNumber: 0,
@@ -30,7 +30,6 @@ Page({
       isSessionOwner: app.globalData.isSessionOwner
     });
     let storedUsercount = WCache.get('usercount');
-    console.log('storedUsercount: ' + storedUsercount);
     if (storedUsercount == undefined){
        this.getUserCount();
     } else {
@@ -38,7 +37,6 @@ Page({
     }
 
     let storedPickNumber = WCache.get('mypickNumber');
-    console.log('storedPickNumber: ' + storedPickNumber);
     if (storedPickNumber != undefined){
       this.setData({
         mypickNumber: storedPickNumber,
@@ -50,7 +48,7 @@ Page({
     if (storedLuckyList && storedLuckyList.length) {
       this.setData({luckyDogs: storedLuckyList});
     }else{
-      if (!socketOpen){
+      if (!socketOpen && storedPickNumber != undefined){
         this.initSocket();
       }
     }
