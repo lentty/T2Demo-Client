@@ -12,8 +12,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userCount: 1,
+    userCount: 0,
     isSessionOwner: false,
+    mypickNumber: '',
     luckyNumber: 0,
     isLuckyDog: false,
     luckyDogs: [],
@@ -28,22 +29,48 @@ Page({
     this.setData({
       isSessionOwner: app.globalData.isSessionOwner
     });
+    let storedUsercount = WCache.get('usercount');
+    console.log('storedUsercount: ' + storedUsercount);
+    if (storedUsercount == undefined){
+       this.getUserCount();
+    } else {
+      this.setData({ userCount: storedUsercount });
+    }
+
+    let storedPickNumber = WCache.get('mypickNumber');
+    console.log('storedPickNumber: ' + storedPickNumber);
+    if (storedPickNumber != undefined){
+      this.setData({
+        mypickNumber: storedPickNumber,
+        isSubmitBtnDisabled: true
+      });
+    }
+
+    let storedLuckyList = WCache.get('storedLuckyDogs');
+    if (storedLuckyList && storedLuckyList.length) {
+      this.setData({luckyDogs: storedLuckyList});
+    }else{
+      if (!socketOpen){
+        this.initSocket();
+      }
+    }
+  },
+
+  getUserCount: function(){
     let that = this;
     wx.request({
       url: app.globalData.host + '/session/usercount',
       method: 'GET',
       success: function (res) {
-        that.setData({userCount: res.data.retObj})
+        that.setData({ userCount: res.data.retObj })
+        WCache.put('usercount', res.data.retObj, 60 * 60);
       },
       fail: function (err) {
-        console.log(err);
+        console.log('Failed to get user account');
       }
     });
-    let storedLuckyList = WCache.get('storedLuckyDogs');
-    if (storedLuckyList && storedLuckyList.length) {
-      this.setData({luckyDogs: storedLuckyList});
-    }
   },
+
   checkPickNumber: function (evt, luckyNumber) {
     let pickNumber = evt ? evt.detail.value : luckyNumber;
     let isValid = pickNumber && pickNumber >= 1 && pickNumber <= this.data.userCount;
@@ -70,6 +97,7 @@ Page({
               mypickNumber: pickNumber,
               isSubmitBtnDisabled: true
             });
+            WCache.put('mypickNumber', pickNumber, 60 * 60);
             that.initSocket();
           }
         },
@@ -189,14 +217,12 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    this.closeSocket();
   },
 
   /**
