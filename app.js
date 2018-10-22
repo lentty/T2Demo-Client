@@ -47,4 +47,8 @@ App({
 
   onShow: function(){
   },
+  
+  onHide: function(){
+    console.log("app::onHide");
+  }
 })

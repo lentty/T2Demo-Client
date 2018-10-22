@@ -26,6 +26,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log("lottery:onLoad");
     this.setData({
       isSessionOwner: app.globalData.isSessionOwner
     });
@@ -215,18 +216,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    console.log("lottery:onShow");
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
+    console.log("lottery:onHide");
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    console.log("lottery:onUnload");
     this.closeSocket();
   },
 
